@@ -10,5 +10,34 @@ package studentscheduler;
  * @author Mike
  */
 public class Course {
-    
+    private String courseName;
+    private String fieldOfStudy;
+    private double numUnits;
+
+//Construct a new instance of CourseSched. Should I do an arraylist somewhere here?
+	public Course (String courseTitle, String fieldOfStudy, double units) {
+		this.courseName = courseTitle;
+		this.fieldOfStudy = fieldOfStudy;
+		this.numUnits = units;
+	}
+
+	//Instance methods for the class CourseSched:
+
+	//Return course title for course entry
+	public String getCourseTitle(){
+		return courseName;
+	}
+        
+        public String getField(){
+            return fieldOfStudy;
+        }
+
+	//Return number of course units for course entry
+	public double getUnits(){
+		return numUnits;
+	}
+        
+        public boolean equals(Course other){
+            return courseName.equals(other.courseName) && fieldOfStudy.equals(other.fieldOfStudy) && numUnits==other.numUnits;
+        }
 }
