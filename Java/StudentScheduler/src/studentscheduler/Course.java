@@ -39,6 +39,10 @@ public class Course {
 		return numUnits;
 	}
         
+        public int getCourseNumber(){
+            return courseNumber;
+        }
+        
         public boolean equals(Course other){
             return courseName.equals(other.courseName) && fieldOfStudy.equals(other.fieldOfStudy) && numUnits==other.numUnits;
         }
