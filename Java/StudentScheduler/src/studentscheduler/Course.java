@@ -13,12 +13,14 @@ public class Course {
     private String courseName;
     private String fieldOfStudy;
     private double numUnits;
+    private int courseNumber;
 
 //Construct a new instance of CourseSched. Should I do an arraylist somewhere here?
-	public Course (String courseTitle, String fieldOfStudy, double units) {
+	public Course (String courseTitle, String fieldOfStudy, int courseNumber, double units) {
 		this.courseName = courseTitle;
 		this.fieldOfStudy = fieldOfStudy;
 		this.numUnits = units;
+                this.courseNumber = courseNumber;
 	}
 
 	//Instance methods for the class CourseSched:
