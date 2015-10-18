@@ -10,5 +10,7 @@ package studentscheduler;
  * @author Mike
  */
 public class Section {
-    
+    public Section(){
+        
+    }
 }

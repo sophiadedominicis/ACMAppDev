@@ -10,6 +10,7 @@ package studentscheduler;
  * @author Mike
  */
 import java.util.ArrayList;
+
 public class Schedule {
     private ArrayList<Section> listOfSections;
     private int numberOfClasses;
@@ -22,7 +23,7 @@ public class Schedule {
     }
     
     public void addSection(Section sec){
-        listOfSection.add(sec);
+        listOfSections.add(sec);
         numberOfClasses++;
         numberOfUnits += sec.getNumUnits();
         if(sec.getEarliestTime() < earliestTime){
@@ -58,6 +59,10 @@ public class Schedule {
     
     public int getlatestTime(){
         return latestTime;
+    }
+    
+    public double getNumUnits(){
+        return numberOfUnits;
     }
     
     public boolean fridayFree(){
