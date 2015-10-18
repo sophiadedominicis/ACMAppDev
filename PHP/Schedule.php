@@ -50,6 +50,38 @@ class Schedule{
 		return $arr;
 	}
 	
+	private function compCPD($a, $b){
+		
+	}
+	
+	public function getCPD(){
+		$arr = array();
+		$arr2 = array();
+		foreach($this->listOfSections as $v){
+			foreach($v->meetingTime as $k=>$m){
+				if(!isset($arr[$k])){
+					$arr[$k] = 1;
+				}
+				else{
+						$arr[$k] +=1;
+				}
+			}
+		}
+		arsort($arr);
+		$i = reset($arr);
+		foreach($arr as $k=>$v){
+			if($i == $v){
+				$arr2[$this->dayToInt($k)]=$v;
+			}
+		}
+		ksort($arr2);
+		foreach($arr2 as $k=>$v){
+			unset($arr2[$k]);
+			$arr2[$this->intToDay($k)] = $v;
+		}
+		return $arr2;
+	}
+	
 	public function getCourses(){
 		$arr = array();
 		foreach($this->listOfSections as $v){
@@ -109,6 +141,25 @@ class Schedule{
 				return 5;
 			case "Sunday":
 				return 6;
+		}
+	}
+	
+	private function intToDay($d){
+		switch($d){
+			case 0:
+				return "Monday";
+			case 1:
+				return "Tuesday";
+			case 2:
+				return "Wednesday";
+			case 3:
+				return "Thursday";
+			case 4:	
+				return "Friday";
+			case 5:
+				return "Saturday";
+			case 6:
+				return "Sunday";
 		}
 	}
 }

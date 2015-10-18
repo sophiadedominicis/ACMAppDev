@@ -17,7 +17,7 @@
 							<h1 class="panel-title pull-left" id="course1"></h1>
 							<form class = "form-inline pull-left course-control" role="form" autocomplete="off">
 								<div class="entry form-group course-control">
-									 Name: <input id="name1" class="form-control name" name="fields[]" type="text" placeholder="Enter Course Name" />
+									 Name<label style="color:red;">*</label>: <input id="name1" class="form-control name" name="fields[]" type="text" placeholder="Enter Course Name"/>
 									 Field of Study: <input class="form-control fos" name="fields[]" type="text" placeholder="ex. CMSC" style="text-transform: uppercase" maxlength="4"/>
 									 Course Number: <input class="form-control cn" name="fields[]" type="text" placeholder="ex. 101" maxlength="3"/>
 									 Number of Units: <input class="form-control units" name="fields[]" type="text" placeholder="ex. 1" maxlength="3"/>
@@ -31,50 +31,51 @@
 						
 						<div class="panel-body">
 							<h3>Enter Section Details</h3>
-							<div class="col-sm-4 panel panel-default">
-								<input class="hidden section"/>
-								<div class="panel-heading">
-									<h1 class="panel-title pull-left" id="course1">Section 1</h1>
-									<button class="btn btn-success btn-add pull-right btn-add-section glyphicon glyphicon-plus" type="button">
-									</button>
-									<div class="clearfix"></div>
-								</div>
-								<div class="panel-body">
-									<form class = "form section-control" role="form" autocomplete="off">
-										<div class="bootstrap-timepicker">
-											<div class="row col-sm-12 input-group">
-												<select class="form-control day">
-													<option>Monday</option>
-													<option>Tuesday</option>
-													<option>Wednesday</option>
-													<option>Thursday</option>
-													<option>Friday</option>
-													<option>Saturday</option>
-													<option>Sunday</option>
-												</select>
-												<span class="input-group-btn">
-													<button class="btn btn-success btn-add btn-add-time glyphicon glyphicon-plus" type="button">
-													</button>
-											   </span>
-												</div>
-												<div class="row col-sm-12">
-													<div class="col-sm-6">
-														<label class="control-label">From:</label>
-														<input id="timepicker1" type="text" class="form-control input-small timepicker from">
-														<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+							<div class="col-md-4">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h1 class="panel-title pull-left" id="course1">Section 1</h1>
+										<button class="btn btn-success btn-add pull-right btn-add-section glyphicon glyphicon-plus" type="button">
+										</button>
+										<div class="clearfix"></div>
+									</div>
+									<div class="panel-body">
+										<form class = "form section-control" role="form" autocomplete="off">
+											<input type="text" placeholder="CRN Number" class="form-control crn" style="margin:1px;"/>
+											<div class="bootstrap-timepicker">
+												<div class="row col-md-12 input-group">
+													<select class="form-control day">
+														<option>Monday</option>
+														<option>Tuesday</option>
+														<option>Wednesday</option>
+														<option>Thursday</option>
+														<option>Friday</option>
+														<option>Saturday</option>
+														<option>Sunday</option>
+													</select>
+													<span class="input-group-btn">
+														<button class="btn btn-success btn-add btn-add-time glyphicon glyphicon-plus" type="button">
+														</button>
+												   </span>
 													</div>
-													<div class="col-sm-6">
-														<label class="control-label">To:</label>
-														<input id="timepicker2" type="text" class="form-control input-small timepicker to">
-														<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+													<div class="row col-md-12">
+														<div class="col-md-6">
+															<label class="control-label">From:</label>
+															<input id="timepicker1" type="text" class="form-control input-small timepicker from">
+															<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+														</div>
+														<div class="col-md-6">
+															<label class="control-label">To:</label>
+															<input id="timepicker2" type="text" class="form-control input-small timepicker to">
+															<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+														</div>
 													</div>
 												</div>
-											</div>
-									</form>
+										</form>
+									</div>
 								</div>
 							</div>
 						</div>
-						<input class="hidden course" />
 					</div>
 				</div>
 			</div>
@@ -83,12 +84,12 @@
 			</div>
 			
 			<div class="hide">
-				<div class="panel panel-default course-template" style="margin-bottom:5px;">
+				<div class="panel panel-default course-template">
 					<div class="panel-heading">
 						<h1 class="panel-title pull-left" id="course1"></h1>
 						<form class = "form-inline pull-left course-control" role="form" autocomplete="off">
 							<div class="entry form-group course-control">
-								 Name: <input id="name1" class="form-control name" name="fields[]" type="text" placeholder="Enter Course Name" />
+								 Name<label style="color:red;">*</label>: <input id="name1" class="form-control name" name="fields[]" type="text" placeholder="Enter Course Name" required="required"/>
 								 Field of Study: <input class="form-control fos" name="fields[]" type="text" placeholder="ex. CMSC" style="text-transform: uppercase" maxlength="4"/>
 								 Course Number: <input class="form-control cn" name="fields[]" type="text" placeholder="ex. 101" maxlength="3"/>
 								 Number of Units: <input class="form-control units" name="fields[]" type="text" placeholder="ex. 1" maxlength="3"/>
@@ -102,46 +103,48 @@
 					
 					<div class="panel-body">
 						<h3>Enter Section Details</h3>
-						<div class="col-sm-4 panel panel-default section-template">
-							<input class="hidden section"/>
-							<div class="panel-heading">
-								<h1 class="panel-title pull-left" id="course1">Section 1</h1>
-								<button class="btn btn-success btn-add pull-right btn-add-section glyphicon glyphicon-plus" type="button">
-								</button>
-								<div class="clearfix"></div>
-							</div>
-							<div class="panel-body">
-								<form class = "form section-control" role="form" autocomplete="off">
-									<div class="bootstrap-timepicker time-template">
-										<div class="row col-sm-12 input-group">
-											<select class="form-control day">
-												<option>Monday</option>
-												<option>Tuesday</option>
-												<option>Wednesday</option>
-												<option>Thursday</option>
-												<option>Friday</option>
-												<option>Saturday</option>
-												<option>Sunday</option>
-											</select>
-											<span class="input-group-btn">
-												<button class="btn btn-success btn-add btn-add-time glyphicon glyphicon-plus" type="button">
-												</button>
-										   </span>
+						<div class="col-md-4 section-template">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h1 class="panel-title pull-left new-course" id="course1">Section 1</h1>
+									<button class="btn btn-success btn-add pull-right btn-add-section glyphicon glyphicon-plus" type="button">
+									</button>
+									<div class="clearfix"></div>
+								</div>
+								<div class="panel-body">
+									<form class = "form section-control" role="form" autocomplete="off">
+										<input type="text" placeholder="CRN Number" class="form-control crn" style="margin:1px;"/>
+										<div class="bootstrap-timepicker time-template">
+											<div class="row col-md-12 input-group" style="margin:1px;">
+												<select class="form-control day">
+													<option>Monday</option>
+													<option>Tuesday</option>
+													<option>Wednesday</option>
+													<option>Thursday</option>
+													<option>Friday</option>
+													<option>Saturday</option>
+													<option>Sunday</option>
+												</select>
+												<span class="input-group-btn">
+													<button class="btn btn-success btn-add btn-add-time glyphicon glyphicon-plus" type="button">
+													</button>
+											   </span>
 											</div>
-											<div class="row col-sm-12">
-												<div class="col-sm-6">
+											<div class="row col-md-12">
+												<div class="col-md-6">
 													<label class="control-label">From:</label>
 													<input id="timepicker1" type="text" class="form-control input-small timepicker from">
 													<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
 												</div>
-												<div class="col-sm-6">
+												<div class="col-md-6">
 													<label class="control-label">To:</label>
 													<input id="timepicker2" type="text" class="form-control input-small timepicker to">
 													<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
 												</div>
 											</div>
 										</div>
-								</form>
+									</form>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -162,15 +165,19 @@
 				console.log("add course");
 				$newPanel.find("h1").attr("id", "course"+numCourse);
 				$newPanel.find("#name1").attr("id", "name"+numCourse);
+				$newPanel.find("h1").each(function(){
+						if($(this).attr("class").indexOf("new-course")>-1){
+							$(this).text("Section "+(++numSection));
+						}
+				});
 				$("#all-courses").append($newPanel);
 			});
 			
 			$(document).on("click", ".btn-add-section", function (e) {
 				var $newPanel = $sectionTemplate.clone();
 				console.log("add section");
-				numSection++;
-				$newPanel.find("h1").text("Section "+numSection);
-				$(e.target).parent().parent().parent().append($newPanel);
+				$newPanel.find("h1").text("Section "+(++numSection));
+				$(e.target).parent().parent().parent().parent().append($newPanel);
 			});
 			
 			$(document).on("click", ".btn-add-time", function (e) {
@@ -229,6 +236,9 @@
 								output[courseNum]["sections"][numSection][numDay] = {};
 							}
 							
+							if(d.indexOf("crn")>-1){
+								output[courseNum]["sections"][numSection]["crn"] = $(this).val();
+							}
 							if(d.indexOf("day")>-1){
 								output[courseNum]["sections"][numSection][numDay]["day"] = $(this).val();
 							}
@@ -249,7 +259,7 @@
 				});
 				var json = JSON.stringify(output);
 				console.log(output);
-				var win = window.open("/makeSched.php?i="+encodeURIComponent(json), '_blank');
+				var win = window.open("/sched/makeSched.php?i="+encodeURIComponent(json), '_blank');
 				win.focus();
 			});
 			
