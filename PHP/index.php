@@ -5,7 +5,15 @@
 		<link rel="stylesheet" href="css/bootstrap.min.css"></link>
         <script type="text/javascript" src="js/jquery.min.js"></script>
         <script type="text/javascript" src="js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="js/bootstrap-timepicker.min.js"></script>
+        <script type="text/javascript" src="js/bootstrap-timepicker.js"></script>
+		<script>
+		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		  ga('create', 'UA-69105822-1', 'auto');
+		  ga('send', 'pageview');
+		</script>
 	</head>
 	<body>
 		<div class="container-fluid">
@@ -30,52 +38,52 @@
 						</div>
 						
 						<div class="panel-body">
-							<h3>Enter Section Details</h3>
-							<div class="col-md-4">
-								<div class="panel panel-default">
-									<div class="panel-heading">
-										<h1 class="panel-title pull-left" id="course1">Section 1</h1>
-										<button class="btn btn-success btn-add pull-right btn-add-section glyphicon glyphicon-plus" type="button">
-										</button>
-										<div class="clearfix"></div>
-									</div>
-									<div class="panel-body">
-										<form class = "form section-control" role="form" autocomplete="off">
-											<input type="text" placeholder="CRN Number" class="form-control crn" style="margin:1px;"/>
-											<div class="bootstrap-timepicker">
-												<div class="row col-md-12 input-group">
-													<select class="form-control day">
-														<option>Monday</option>
-														<option>Tuesday</option>
-														<option>Wednesday</option>
-														<option>Thursday</option>
-														<option>Friday</option>
-														<option>Saturday</option>
-														<option>Sunday</option>
-													</select>
-													<span class="input-group-btn">
-														<button class="btn btn-success btn-add btn-add-time glyphicon glyphicon-plus" type="button">
-														</button>
-												   </span>
-													</div>
-													<div class="row col-md-12">
-														<div class="col-md-6">
-															<label class="control-label">From:</label>
-															<input id="timepicker1" type="text" class="form-control input-small timepicker from">
-															<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-														</div>
-														<div class="col-md-6">
-															<label class="control-label">To:</label>
-															<input id="timepicker2" type="text" class="form-control input-small timepicker to">
-															<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-														</div>
-													</div>
+						<h3>Enter Section Details</h3>
+						<div class="col-md-4">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h1 class="panel-title pull-left new-course" id="course1">Section 1</h1>
+									<button class="btn btn-success btn-add pull-right btn-add-section glyphicon glyphicon-plus" type="button">
+									</button>
+									<div class="clearfix"></div>
+								</div>
+								<div class="panel-body">
+									<form class = "form section-control" role="form" autocomplete="off">
+										<input type="text" placeholder="CRN Number" class="form-control crn" style="margin:1px;"/>
+										<div>
+											<div class="row col-md-12 input-group" style="margin:1px;">
+												<select class="form-control day">
+													<option>Monday</option>
+													<option>Tuesday</option>
+													<option>Wednesday</option>
+													<option>Thursday</option>
+													<option>Friday</option>
+													<option>Saturday</option>
+													<option>Sunday</option>
+												</select>
+												<span class="input-group-btn">
+													<button class="btn btn-success btn-add btn-add-time glyphicon glyphicon-plus" type="button">
+													</button>
+											   </span>
+											</div>
+											<div class="row col-md-12">
+												<div class="col-md-6 bootstrap-timepicker timepicker">
+													<label class="control-label">From:</label>
+													<input id="timepicker1" type="text" class="form-control input-small from time">
+													<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
 												</div>
-										</form>
-									</div>
+												<div class="col-md-6 bootstrap-timepicker timepicker">
+													<label class="control-label">To:</label>
+													<input id="timepicker2" type="text" class="form-control input-small to time">
+													<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+												</div>
+											</div>
+										</div>
+									</form>
 								</div>
 							</div>
 						</div>
+					</div>
 					</div>
 				</div>
 			</div>
@@ -114,7 +122,7 @@
 								<div class="panel-body">
 									<form class = "form section-control" role="form" autocomplete="off">
 										<input type="text" placeholder="CRN Number" class="form-control crn" style="margin:1px;"/>
-										<div class="bootstrap-timepicker time-template">
+										<div class="time-template">
 											<div class="row col-md-12 input-group" style="margin:1px;">
 												<select class="form-control day">
 													<option>Monday</option>
@@ -131,14 +139,14 @@
 											   </span>
 											</div>
 											<div class="row col-md-12">
-												<div class="col-md-6">
+												<div class="col-md-6 bootstrap-timepicker timepicker">
 													<label class="control-label">From:</label>
-													<input id="timepicker1" type="text" class="form-control input-small timepicker from">
+													<input id="timepicker1" type="text" class="form-control input-small from time">
 													<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
 												</div>
-												<div class="col-md-6">
+												<div class="col-md-6 bootstrap-timepicker timepicker">
 													<label class="control-label">To:</label>
-													<input id="timepicker2" type="text" class="form-control input-small timepicker to">
+													<input id="timepicker2" type="text" class="form-control input-small to time">
 													<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
 												</div>
 											</div>
@@ -148,7 +156,6 @@
 							</div>
 						</div>
 					</div>
-					<input class="hidden course" />
 				</div>
 			</div>
 		</div>
@@ -271,7 +278,7 @@
 					$("<br/><hr id=\"hr"+id+"\" style=\"width:100%; border-top:1px solid #FFFFFF;\"/>").insertAfter("#course"+id);
 				}
 			  });
-			  $('.timepicker').timepicker({minuteStep:5, defaultTime:"12:00 AM"});
+			  $('.time').timepicker({minuteStep:5, defaultTime:"12:00 AM"});
 		</script>
 	</body>
 </html>

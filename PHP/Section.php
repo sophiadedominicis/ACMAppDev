@@ -4,20 +4,18 @@ class Section extends Course{
 	private $latestTime;
 	private $meetsFriday;
 	public $meetingTime;
-	private $crn;
-	
+	private $crn;	
 	public function __construct($courseTitle, $fos, $courseNum, $units, $crn){
 		parent::__construct($courseTitle, $fos, $courseNum, $units);
 		$this->meetsFriday = false;
 		$this->crn = $crn;
 	}
-	
+
 	public function addTime($day, $from, $to){
 		$this->meetingTime[$day] = ["from"=>strtotime($from),  "to"=>strtotime($to)];
 		if($day == "Friday"){
 			$this->meetsFriday = true;
 		}
-		
 		if(!isset($this->earliestTime)){
 			$this->earliestTime = array($this->dayToInt($day), strtotime($from));
 		}
@@ -26,7 +24,7 @@ class Section extends Course{
 				$this->earliestTime = array($this->dayToInt($day), strtotime($from));
 			}
 		}
-		
+
 		if(!isset($this->latestTime)){
 			$this->latestTime = array($this->dayToInt($day), strtotime($from));
 		}
@@ -70,28 +68,28 @@ class Section extends Course{
 	}
 	
 	public function __toString(){
-		$me = $this->getCourseTitle()." on ".$this->intToDay($this->getEarliestTime()[0])." at ".date("h:i A", $this->getEarliestTime()[1]);
+		$me = $this->getCourseTitle()." on ".$this->intToDay($this->getEarliestTime()[0])." at ".date("g:i A", $this->getEarliestTime()[1]);
 		return $me;
-	}
+	}	
 	
 	private function dayToInt($day){
 		switch($day){
-			case "Monday":
+			case "Monday":				
 				return 0;
-			case "Tuesday":
+			case "Tuesday":				
 				return 1;
-			case "Wednesday":
+			case "Wednesday":				
 				return 2;
-			case "Thursday":
+			case "Thursday":				
 				return 3;
-			case "Friday":	
+			case "Friday":				
 				return 4;
-			case "Saturday":
+			case "Saturday":				
 				return 5;
-			case "Sunday":
+			case "Sunday":				
 				return 6;
 		}
-	}
+	}	
 	
 	private function intToDay($d){
 		switch($d){
@@ -111,7 +109,5 @@ class Section extends Course{
 				return "Sunday";
 		}
 	}
-	
 }
-
 ?>

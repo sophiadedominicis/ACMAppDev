@@ -59,13 +59,11 @@ function run($sections, $curr, $pick){
 	}
 }
 
-
-
 function sortSched($a, $b){
 	if($a==$b){
 		return 0;
 	}
-	return ($a->getNumClasses() > $b->getNumClasses()) ? -1 : 1;
+	return ($a->getScore() > $b->getScore()) ? -1 : 1;
 }
 ?>
 
@@ -76,31 +74,89 @@ function sortSched($a, $b){
 		<link rel="stylesheet" href="css/bootstrap.min.css"></link>
         <script type="text/javascript" src="js/jquery.min.js"></script>
         <script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<script>
+		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		  ga('create', 'UA-69105822-1', 'auto');
+		  ga('send', 'pageview');
+		</script>
 	</head>
 	<body>
+	<script>
+		$(document).ready(function(){
+			$('[data-toggle="popover"]').popover();   
+		});
+		
+		$(document).on("click", ".btn-expand", function (e) {
+			$('.collapse:not(.in)').each(function (index) {
+				$(this).addClass("in");
+			});
+			$(this).text(' Collapse All Schedules');
+			$(this).removeClass("glyphicon-collapse-down btn-expand");
+			$(this).addClass("glyphicon-collapse-up btn-collapse");
+		});
+		
+		$(document).on("click", ".btn-collapse", function (e) {
+			$('.collapse:not(.in)').each(function (index) {
+				$(this).collapse("toggle");
+			});
+			$('.collapse.in').each(function (index) {
+				$(this).removeClass("in");
+			});
+			$(this).text(' Expand All Schedules');
+			$(this).addClass("glyphicon-collapse-down btn-expand");
+			$(this).removeClass("glyphicon-collapse-up btn-collapse");
+		});
+	</script>
 		<div class="container-fluid">
-			<div class="row col-sm-12">
+			<div class="row col-md-12">
+				<?php 
+				$i = 0;
+				foreach($finalSchedules as $k=>$v){
+					if($v->getNumUnits() >= 3.5){
+						$i += 1;
+					}
+				}
+				?>
+				
+				<div class="row col-sm-12"><div class="col-sm-6"><?php echo "<h1><strong>".$i."</strong> <a href='#' style='color:#ffffff;' data-toggle='popover' title='Definition of Compliant' data-content='Compliant schedules have at least 3.5 units, as per UR requirements.'>Compliant Schedules Generated</a></h1>";?>
+				</div><div class="col-sm-6"><h1><button class="btn btn-success pull-right btn-expand glyphicon glyphicon-collapse-down" type="button"> Expand All Schedules</button></h1></div></div>
+				<hr width="100%" />
+				
 				<div class="panel-group">
-			<?php 
-			echo "<strong>".count($GLOBALS['schedules'])." Schedules Generated</strong><br/><br/>";
-			foreach($GLOBALS['schedules'] as $k=>$a){
-				if($k%3==0){
-					echo "<div class='row' style='margin:2px;'>";
-				}
-				echo "<div class='col-sm-4'>";
-				echo "<div class='panel panel-default'>";
-				echo "<div class='panel-heading panel-title'>";
-				echo "<a data-toggle='collapse' href='#collapse".$k."'>".$a->getNumClasses()." classes, ".$a->getNumUnits()." units, with ".reset($a->getCPD())." classes every ".key($a->getCPD())."</a></div>";
-				echo "<div class='panel-collapse collapse' id='collapse".$k."'>";
-				foreach($a->getSchedule() as $b){
-					echo "<p>".$b."</p>";
-				}
-				echo "</div></div></div>";
-				if($k%3==2){
-					echo "</div>";
-				}
-			}
-			?>
+					<?php 
+					$num = 0;
+					foreach($finalSchedules as $k=>$a){
+						if($a->getNumUnits() < 3.5){
+							continue;
+						}
+						if($num%4==0){
+							echo "<div class='row' style='margin:2px;'>";
+						}
+						$in = "";
+						if($num<4){
+							$in = " in";
+						}
+						echo "<div class='col-md-3'>";
+						echo "<div class='panel panel-default'>";
+						echo "<div class='panel-heading panel-title' data-toggle='collapse' data-target='#collapse".$num."' style='cursor: pointer;'>";
+						echo "<a data-toggle='collapse' href='#collapse".$num."'>".$a->getNumClasses()." classes, ".$a->getNumUnits()." units, with ".reset($a->getCPD())." classes every ".key($a->getCPD())." and score ".$a->getScore()."</a></div>";
+						echo "<div class='panel-collapse collapse panel-body".$in."' id='collapse".$num."'>";
+						echo "<table class='table table-condensed table-responsive'>";
+						foreach($a->getSchedule() as $b){
+							echo "<tr><td>";
+							echo $b;
+							echo "</tr></td>";
+						}
+						echo "</table></div></div></div>";
+						if($num%4==3 || $k==count($GLOBALS['schedules'])){
+							echo "</div>";
+						}
+						$num += 1;
+					}
+					?>
 				</div>
 			</div>
 		</div>

@@ -27,7 +27,6 @@ class Course{
 	public function getNumUnits(){
 		return $this->numUnits;
 	}
-		
 }
 
 ?>

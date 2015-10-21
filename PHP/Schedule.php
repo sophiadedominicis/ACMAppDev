@@ -6,12 +6,14 @@ class Schedule{
 	private $earliestTime;
 	private $latestTime;
 	private $fridayFree;
+	private $score;
 	
 	public function __construct(){
 		$this->listOfSections = array();
 		$this->numberOfClasses = 0;
 		$this->numberOfUnits = 0;
 		$this->fridayFree = true;
+		$this->score = 0;
 	}
 	
 	public function addSection($sec){
@@ -85,14 +87,14 @@ class Schedule{
 	public function getCourses(){
 		$arr = array();
 		foreach($this->listOfSections as $v){
-			$tmp = ['title'=>$v->getCourseTitle(), 'fieldOfStudy'=>$v->getFieldOfStudy(), 'courseNum'=>$v->getCourseNumber(), 'time'=>date("h:i A", reset($v->meetingTime)['from']), 'day'=>key($v->meetingTime)];
+			$tmp = ['title'=>$v->getCourseTitle(), 'fieldOfStudy'=>$v->getFieldOfStudy(), 'courseNum'=>$v->getCourseNumber(), 'time'=>date("g:i A", reset($v->meetingTime)['from']), 'day'=>key($v->meetingTime)];
 			$arr[$v->getCourseTitle()] = array();
 			array_push($arr[$v->getCourseTitle()], $tmp);
 		}
 		$arr['friday free'] = $this->fridayFree();
 		$arr['Number of Courses'] = $this->getNumClasses();
-		$arr['Earliest Time'] = date("h:i A", $this->earliestTime[1]);
-		$arr['Latest Time'] = date("h:i A", $this->latestTime[1]);
+		$arr['Earliest Time'] = date("g:i A", $this->earliestTime[1]);
+		$arr['Latest Time'] = date("g:i A", $this->latestTime[1]);
 		$arr['units']=$this->getNumUnits();
 		return $arr;
 	}
@@ -117,6 +119,11 @@ class Schedule{
         return $this->numberOfUnits;
     }
 	
+	public function getScore(){
+		$this->setScore();
+		return $this->score;
+	}
+	
 	public function __toString() {
         $me = "".$this->numberOfClasses.$this->fridayFree;
 		foreach($this->listOfSections as $a){
@@ -124,6 +131,37 @@ class Schedule{
 		}
 		return $me;
     }
+	
+	private function setScore(){
+		$classes = $this->numberOfUnits+$this->numberOfClasses;
+		$this->score = $classes*2;
+		$this->score += ($this->numberOfClasses - reset($this->getCPD()))*1.5;
+		if($this->fridayFree){
+			$this->score += 4;
+		}
+		
+		$earliest = array();
+		foreach($this->listOfSections as $k=>$v){
+			foreach($v->meetingTime as $k2=>$v2){
+				if(isset($earliest[$k2])){
+					if($earliest[$k2] > $v2["from"]){
+						$earliest[$k2] = $v2["from"];
+					}
+				}
+				else{
+					$earliest[$k2] = array();
+					$earliest[$k2] = $v2["from"];
+				}
+			}
+		}
+		
+		$timeScore = 0;
+		foreach($earliest as $k=>$v){
+			$timeScore += ($v - strtotime("10:00 AM"))/3600;
+		}
+		
+		$this->score += ($timeScore/$this->numberOfClasses)*.8;
+	}
 	
 	private function dayToInt($day){
 		switch($day){
