@@ -13,3 +13,4 @@ our algorithm, generates all possible non-conflicting schedules.
 Theory of Operation
 --------------------
 Our algorithm is essentially a recursive tree, which is explained more in the image below.
+![Theory of Operation](https://github.com/md100play/ACMAppDev/blob/master/illustration.png)
