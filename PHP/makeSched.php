@@ -121,7 +121,7 @@ function sortSched($a, $b){
 				}
 				?>
 				
-				<div class="row col-sm-12"><div class="col-sm-6"><?php echo "<h1><strong>".$i."</strong> <a href='#' style='color:#ffffff;' data-toggle='popover' title='Definition of Compliant' data-content='Compliant schedules have at least 3.5 units, as per UR requirements.'>Compliant Schedules Generated</a></h1>";?>
+				<div class="row col-sm-12"><div class="col-sm-6"><?php echo "<h1><strong>".$i."</strong> <a href='#' style='color:#000000;' data-toggle='popover' title='Definition of Compliant' data-content='Compliant schedules have at least 3.5 units, as per UR requirements.'>Compliant Schedules Generated</a></h1>";?>
 				</div><div class="col-sm-6"><h1><button class="btn btn-success pull-right btn-expand glyphicon glyphicon-collapse-down" type="button"> Expand All Schedules</button></h1></div></div>
 				<hr width="100%" />
 				
