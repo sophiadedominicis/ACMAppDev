@@ -64,28 +64,28 @@ public class Section extends Course{
 	}
 	
 	public function getEarliestTime(){
-		return $this->earliestTime;
+		return earliestTime;
 	}
 	
 	public function getLatestTime(){
-		return $this->latestTime;
+		return latestTime;
 	}
 	
 	public function meetsFriday(){
-		return $this->meetsFriday;
+		return meetsFriday;
 	}
 	
 	public function getCRN(){
-		return $this->crn;
+		return crn;
 	}
 	
 	public function __toString(){
-		$me = $this->getCourseTitle()." on ".$this->intToDay($this->getEarliestTime()[0])." at ".date("g:i A", $this->getEarliestTime()[1]);
-		return $me;
+		String me = getCourseTitle()+" on "+intToDay($this->getEarliestTime()[0])+" at "+date("g:i A", $this->getEarliestTime()[1]);
+		return me;
 	}	
 	
-	private function dayToInt($day){
-		switch($day){
+	private function dayToInt(String day){
+		switch(day){
 			case "Monday":				
 				return 0;
 			case "Tuesday":				
@@ -103,8 +103,8 @@ public class Section extends Course{
 		}
 	}	
 	
-	private function intToDay($d){
-		switch($d){
+	private function intToDay(int d){
+		switch(d){
 			case 0:
 				return "Monday";
 			case 1:
