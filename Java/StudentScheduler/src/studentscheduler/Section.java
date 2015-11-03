@@ -67,6 +67,16 @@ public class Section extends Course {
         return false;
     }
 
+    @Override
+    public String toString(){
+        Calendar t = Calendar.getInstance();
+        t.setTimeInMillis(getEarliestTime()[1]);
+        String ampm = t.get(Calendar.AM_PM)==0 ? "AM":"PM";
+        String minutes = String.format("%02d", t.get(Calendar.MINUTE));
+        String time = t.get(Calendar.HOUR)+":"+minutes+" "+ampm;
+        return getCourseTitle()+" every "+intToDay(getEarliestTime()[0])+" at "+time;
+    }
+    
     public int[] getEarliestTime() {
         return earliestTime;
     }

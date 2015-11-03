@@ -12,7 +12,7 @@ package studentscheduler;
 import java.util.ArrayList;
 
 public class Schedule {
-    private ArrayList<Section> listOfSections;
+    private ArrayList<Section> listOfSections = new ArrayList<>();
     private int numberOfClasses;
     private double numberOfUnits;
     private int[] earliestTime;
@@ -46,6 +46,16 @@ public class Schedule {
         if(sec.meetsFriday()){
             fridayFree = false;
         }
+    }
+    
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        for(Section a : listOfSections){
+            sb.append(a);
+            sb.append("\n");
+        }
+        return sb.toString();
     }
     
     public ArrayList<Section> getSchedule(){
