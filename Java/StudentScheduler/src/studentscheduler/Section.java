@@ -1,60 +1,63 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package studentscheduler;
-import java.util.*;
 
-/**
- *
- * @author Mike
- */
-public class Section extends Course{
-	private String[] earliestTime;
-	private String[] latestTime;
-	private boolean meetsFriday;
-	public HashMap<String, HashMap<String, String>> meetingTime;
-	private String crn;	
-	
-    public void Section(String courseTitle, String fos, int courseNum, double units, String crn){
-        super(courseTime, fos, courseNum, units, crn);
-		meetsFriday = false;
-		this.crn = crn;
+package studentscheduler;
+
+import java.util.*;
+import static studentscheduler.strtotime.strtotime;
+
+public class Section extends Course {
+    private int[] earliestTime;
+    private int[] latestTime;
+    private boolean meetsFriday;
+    public HashMap<String, HashMap<String, Integer>> meetingTime = new HashMap<>();
+    private String crn;
+
+    public Section(String courseTitle, String fos, int courseNum, double units, String crn) {
+        super(courseTitle, fos, courseNum, units);
+        meetsFriday = false;
+        this.crn = crn;
     }
 
-    public void addTime(String day, String from, String to){
-        meetingTime[day] = ["from"=>strtotime(from),  "to"=>strtotime(to)];
-        if(day.equals("Friday")){
+    public void addTime(String day, String from1, String to1) {
+        int from = (int) strtotime(from1).getTime();
+        int to = (int) strtotime(to1).getTime();
+        
+        HashMap<String, Integer> temp = new HashMap<>();
+        temp.put("from", from);
+        temp.put("to", to);
+        meetingTime.put(day, temp);
+        
+        if (earliestTime == null) {
+            earliestTime = new int[2];
+            earliestTime[0] = dayToInt(day);
+            earliestTime[1] = from;
+        } 
+        else if (earliestTime[1] > from) {
+            earliestTime[0] = dayToInt(day);
+            earliestTime[1] = from;
+        }
+        
+        if (day.equals("Friday")) {
             meetsFriday = true;
         }
-        if(!isset(earliestTime)){
-            earliestTime = array(dayToInt(day), strtotime(from));
-        }
-        else if(earliestTime[0] > dayToInt(day)){
-            if(earliestTime[1] > strtotime(from)){
-                earliestTime = array(dayToInt(day), strtotime(from));
-            }
-        }
-
-        if(!isset(latestTime)){
-            latestTime = array(dayToInt(day), strtotime(from));
-        }
-        else if(latestTime[0] < dayToInt(day)){
-            if(latestTime[1] < strtotime(from)){
-                latestTime = array(dayToInt(day), strtotime(from));
-            }
+        
+        if (latestTime == null) {
+            latestTime = new int[2];
+            latestTime[0] = dayToInt(day);
+            latestTime[1] = to;
+        } 
+        else if (latestTime[1] < to) {
+            latestTime[1] = to;
         }
     }
 
-    public boolean conflictsWith(Section other){
-        if(getFieldOfStudy() == other.getFieldOfStudy() && getCourseNumber() == other.getCourseNumber() && getCourseTitle() == other.getCourseTitle()){
+    public boolean conflictsWith(Section other) {
+        if (getField().equals(other.getField()) && getCourseNumber() == other.getCourseNumber() && getCourseTitle().equals(other.getCourseTitle())) {
             return true;
-        }
-        else{
-            foreach($this->meetingTime as $k=>$a){
-                if(isset($other->meetingTime[$k])){
-                    if($a["from"]<=$other->meetingTime[$k]["to"] && $a["to"]>=$other->meetingTime[$k]["from"]){
+        } 
+        else {
+            for(Map.Entry<String, HashMap<String, Integer>> a : meetingTime.entrySet()){
+                if(other.meetingTime.containsKey(a.getKey())){
+                    if(a.getValue().get("from") <= other.meetingTime.get(a.getKey()).get("to") && a.getValue().get("to") >= other.meetingTime.get(a.getKey()).get("from")){
                         return true;
                     }
                 }
@@ -63,48 +66,49 @@ public class Section extends Course{
         return false;
     }
 
-    public function getEarliestTime(){
-            return earliestTime;
+    public int[] getEarliestTime() {
+        return earliestTime;
     }
 
-    public function getLatestTime(){
-            return latestTime;
+    public int[] getLatestTime() {
+        return latestTime;
     }
 
-    public function meetsFriday(){
-            return meetsFriday;
+    public boolean meetsFriday() {
+        return meetsFriday;
     }
 
-    public function getCRN(){
-            return crn;
+    public String getCRN() {
+        return crn;
     }
 
-    public function __toString(){
-            String me = getCourseTitle()+" on "+intToDay($this->getEarliestTime()[0])+" at "+date("g:i A", $this->getEarliestTime()[1]);
-            return me;
-    }	
+    //Return number of course units for course entry
+    public double getNumUnits(){
+        return super.getUnits();
+    }
 
-    private function dayToInt(String day){
-        switch(day){
-            case "Monday":				
+    private int dayToInt(String day) {
+        switch (day) {
+            case "Monday":
                 return 0;
-            case "Tuesday":				
+            case "Tuesday":
                 return 1;
-            case "Wednesday":				
+            case "Wednesday":
                 return 2;
-            case "Thursday":				
+            case "Thursday":
                 return 3;
-            case "Friday":				
+            case "Friday":
                 return 4;
-            case "Saturday":				
+            case "Saturday":
                 return 5;
-            case "Sunday":				
+            case "Sunday":
                 return 6;
+            default: return -1;
         }
-    }	
+    }
 
-    private function intToDay(int d){
-        switch(d){
+    private String intToDay(int day) {
+        switch (day) {
             case 0:
                 return "Monday";
             case 1:
@@ -113,12 +117,13 @@ public class Section extends Course{
                 return "Wednesday";
             case 3:
                 return "Thursday";
-            case 4:	
+            case 4:
                 return "Friday";
             case 5:
                 return "Saturday";
             case 6:
                 return "Sunday";
+            default: return "";
         }
     }
 }

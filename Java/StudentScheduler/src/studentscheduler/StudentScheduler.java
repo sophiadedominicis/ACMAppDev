@@ -5,7 +5,7 @@
  */
 package studentscheduler;
 
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  *
@@ -17,7 +17,23 @@ public class StudentScheduler {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        ArrayList<Section> sections = new ArrayList();
+        
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Enter a course name");
+        String courseName = scan.nextLine();
+        Section tempSection = new Section(courseName, "", 0, 1, "");
+        
+        System.out.println("Enter day of the week");
+        String day = scan.nextLine();
+        System.out.println("Enter the start time");
+        String from = scan.nextLine();
+        System.out.println("Enter the end time");
+        String to = scan.nextLine();
+        
+        tempSection.addTime(day, from, to);
+        
+        
     }
     
     public static void run(ArrayList<Section> sections, ArrayList<Section> curr, Section pick){

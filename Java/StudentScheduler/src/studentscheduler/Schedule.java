@@ -15,8 +15,8 @@ public class Schedule {
     private ArrayList<Section> listOfSections;
     private int numberOfClasses;
     private double numberOfUnits;
-    private int earliestTime;
-    private int latestTime;
+    private int[] earliestTime;
+    private int[] latestTime;
     private boolean fridayFree;
     
     public Schedule(){
@@ -26,12 +26,23 @@ public class Schedule {
         listOfSections.add(sec);
         numberOfClasses++;
         numberOfUnits += sec.getNumUnits();
-        if(sec.getEarliestTime() < earliestTime){
+        
+        if(earliestTime == null){
             earliestTime = sec.getEarliestTime();
         }
-        if(sec.getLatestTime() > latestTime){
+        else if(earliestTime[1] > sec.getEarliestTime()[1]){
+            earliestTime[0] = sec.getEarliestTime()[0];
+            earliestTime[1] = sec.getEarliestTime()[1];
+        }
+
+        if(latestTime == null){
             latestTime = sec.getLatestTime();
         }
+        else if(latestTime[1] < sec.getLatestTime()[1]){
+            latestTime[0] = sec.getLatestTime()[0];
+            latestTime[1] = sec.getLatestTime()[1];
+        }
+        
         if(sec.meetsFriday()){
             fridayFree = false;
         }
@@ -41,23 +52,15 @@ public class Schedule {
         return listOfSections;
     }
     
-    public ArrayList<Course> getCourses(){
-        ArrayList<Course> courses = new ArrayList<>();
-        for(Section c : listOfSections){
-            courses.add((Course) Section);
-        }
-        return courses;
-    }
-    
     public int getNumClasses(){
         return numberOfClasses;
     }
     
-    public int getEarliestTime(){
+    public int[] getEarliestTime(){
         return earliestTime;
     }
     
-    public int getlatestTime(){
+    public int[] getlatestTime(){
         return latestTime;
     }
     
