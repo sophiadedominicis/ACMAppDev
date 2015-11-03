@@ -21,16 +21,18 @@ public class StudentScheduler {
         Scanner scan = new Scanner(System.in);
         
         addMoreCourses(scan);
-        System.out.println("Do you want to add another course?\n [Y/N]");
+        System.out.println("\n");
+        System.out.println("Do you want to add another course?\t [Y/N]");
         String answer = scan.nextLine();
         while(answer.toLowerCase().equals("y")){
             addMoreCourses(scan);
-            System.out.println("Do you want to add another course?\n [Y/N]");
+            System.out.println("\n");
+            System.out.println("Do you want to add another course?\t [Y/N]");
             answer = scan.nextLine();
         }
+        System.out.println("\n\n");
         
         //generate schedules
-        
         for(int i=0; i<sections.size(); i++){
             ArrayList<Section> temp = new ArrayList<>(sections);
             Section a = temp.get(i);
@@ -43,6 +45,7 @@ public class StudentScheduler {
             run(temp, curr, a);
         }
         
+        System.out.println(allSchedules.size()+" Schedules Generated");
         for(Schedule a : allSchedules){
             System.out.println(a);
         }
@@ -52,11 +55,12 @@ public class StudentScheduler {
         System.out.println("Enter a course name");
         String courseName = scan.nextLine();
         sections.add(addMoreSections(courseName, scan));
-        System.out.println("Do you want to add another section for that course?\n [Y/N]");
+        System.out.println("Do you want to add another section for that course?\t [Y/N]");
         String answer = scan.nextLine();
+        
         while(answer.toLowerCase().equals("y")){
             sections.add(addMoreSections(courseName, scan));
-            System.out.println("Do you want to add another section for that course?\n [Y/N]");
+            System.out.println("Do you want to add another section for that course?\t [Y/N]");
             answer = scan.nextLine();
         }
     }
@@ -64,11 +68,11 @@ public class StudentScheduler {
     private static Section addMoreSections(String courseName, Scanner scan){
         Section tempSection = new Section(courseName, "", 0, 1, "");
         addMoreTime(tempSection, scan);
-        System.out.println("Do you want to add another time for that section?\n [Y/N]");
+        System.out.println("Do you want to add another time for that section?\t [Y/N]");
         String answer = scan.nextLine();
         while(answer.toLowerCase().equals("y")){
             addMoreTime(tempSection, scan);
-            System.out.println("Do you want to add another time for that section?\n [Y/N]");
+            System.out.println("Do you want to add another time for that section?\t [Y/N]");
             answer = scan.nextLine();
         }
         
