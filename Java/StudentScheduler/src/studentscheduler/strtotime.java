@@ -20,11 +20,11 @@ public final class strtotime {
         matchers.add(new DateFormatMatcher(new SimpleDateFormat("hh:mm a")));
         matchers.add(new DateFormatMatcher(new SimpleDateFormat("hh:mm")));
         matchers.add(new DateFormatMatcher(new SimpleDateFormat("HH:mm")));
-        matchers.add(new DateFormatMatcher(new SimpleDateFormat("hh")));
-        matchers.add(new DateFormatMatcher(new SimpleDateFormat("HH")));
         matchers.add(new DateFormatMatcher(new SimpleDateFormat("hh mm a")));
         matchers.add(new DateFormatMatcher(new SimpleDateFormat("hh mm")));
         matchers.add(new DateFormatMatcher(new SimpleDateFormat("HH mm")));
+        matchers.add(new DateFormatMatcher(new SimpleDateFormat("hh")));
+        matchers.add(new DateFormatMatcher(new SimpleDateFormat("HH")));
         // add as many format as you want 
     }
 
