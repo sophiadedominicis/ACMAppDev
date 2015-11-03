@@ -5,6 +5,8 @@
  */
 package studentscheduler;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Mike
@@ -16,6 +18,31 @@ public class StudentScheduler {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+    }
+    
+    public static void run(ArrayList<Section> sections, ArrayList<Section> curr, Section pick){
+        curr.add(pick);
+        ArrayList<Section> temp = sections;
+        int i = 0;
+        for(Section k : temp){
+            if(k.conflictsWith(pick)){
+                temp.remove(i);
+            }
+            i++;
+        }
+        if(count($temp)==0){
+            $a = new Schedule();
+            foreach($curr as $b){
+                $a->addSection($b);
+            }
+            array_push($GLOBALS['schedules'], $a);
+        }
+        else{
+            foreach($temp as $k=>$v){
+                unset($temp[$k]);
+                run($temp, $curr, $v);
+            }
+        }
     }
     
 }
