@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * @author Mike
  */
 public class StudentScheduler {
-
+    public static ArrayList<Schedule> allSchedules = new ArrayList<Schedule>();
     /**
      * @param args the command line arguments
      */
@@ -23,24 +23,22 @@ public class StudentScheduler {
     public static void run(ArrayList<Section> sections, ArrayList<Section> curr, Section pick){
         curr.add(pick);
         ArrayList<Section> temp = sections;
-        int i = 0;
-        for(Section k : temp){
-            if(k.conflictsWith(pick)){
+        for(int i=0; i<temp.size(); i++){
+            if(temp.get(i).conflictsWith(pick)){
                 temp.remove(i);
             }
-            i++;
         }
-        if(count($temp)==0){
-            $a = new Schedule();
-            foreach($curr as $b){
-                $a->addSection($b);
+        if(temp.isEmpty()){
+            Schedule a = new Schedule();
+            for(Section b : curr){
+                a.addSection(b);
             }
-            array_push($GLOBALS['schedules'], $a);
+            allSchedules.add(a);
         }
         else{
-            foreach($temp as $k=>$v){
-                unset($temp[$k]);
-                run($temp, $curr, $v);
+            for(Section a : temp){
+                temp.remove(0);
+                run(temp, curr, a);
             }
         }
     }
