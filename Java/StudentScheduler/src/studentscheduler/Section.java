@@ -36,10 +36,6 @@ public class Section extends Course {
             earliestTime[1] = from;
         }
         
-        if (day.equals("Friday")) {
-            meetsFriday = true;
-        }
-        
         if (latestTime == null) {
             latestTime = new int[2];
             latestTime[0] = dayToInt(day);
@@ -47,6 +43,10 @@ public class Section extends Course {
         } 
         else if (latestTime[1] < to) {
             latestTime[1] = to;
+        }
+        
+        if (day.equals("Friday")) {
+            meetsFriday = true;
         }
     }
 
