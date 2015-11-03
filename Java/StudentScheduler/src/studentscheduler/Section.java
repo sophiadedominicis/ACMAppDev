@@ -18,6 +18,7 @@ public class Section extends Course {
     }
 
     public void addTime(String day, String from1, String to1) {
+        day = day.toLowerCase();
         int from = (int) strtotime(from1).getTime();
         int to = (int) strtotime(to1).getTime();
         
@@ -45,7 +46,7 @@ public class Section extends Course {
             latestTime[1] = to;
         }
         
-        if (day.equals("Friday")) {
+        if (day.equals("friday")) {
             meetsFriday = true;
         }
     }
@@ -88,20 +89,21 @@ public class Section extends Course {
     }
 
     private int dayToInt(String day) {
+        day = day.toLowerCase();
         switch (day) {
-            case "Monday":
+            case "monday":
                 return 0;
-            case "Tuesday":
+            case "tuesday":
                 return 1;
-            case "Wednesday":
+            case "wednesday":
                 return 2;
-            case "Thursday":
+            case "thursday":
                 return 3;
-            case "Friday":
+            case "friday":
                 return 4;
-            case "Saturday":
+            case "saturday":
                 return 5;
-            case "Sunday":
+            case "sunday":
                 return 6;
             default: return -1;
         }
