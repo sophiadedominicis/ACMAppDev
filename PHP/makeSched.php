@@ -8,11 +8,15 @@ $get = json_decode(urldecode($_GET['i']), true);
 
 $sections = array();
 foreach($get as $a){
-	if($a["course number"] != ""){
+	if($a["Course Name"] != ""){
+		if($a["course number"] == ""){
+			$a["course number"] = "0";
+		}
 		foreach($a["sections"] as $k=>$b){
 			$crn = $k;
-			if(isset($a["crn"])){
-				$crn = $a["crn"];
+			if(isset($b["crn"])){
+				$crn = $b["crn"];
+				unset($b["crn"]);
 			}
 			$temp = new Section($a["Course Name"], $a["Field of Study"], $a["course number"], intval($a["Units"]), $crn);
 			foreach($b as $c){
@@ -111,27 +115,16 @@ function sortSched($a, $b){
 		});
 	</script>
 		<div class="container-fluid">
-			<div class="row col-md-12">
-				<?php 
-				$i = 0;
-				foreach($finalSchedules as $k=>$v){
-					if($v->getNumUnits() >= 3.5){
-						$i += 1;
-					}
-				}
-				?>
-				
-				<div class="row col-sm-12"><div class="col-sm-6"><?php echo "<h1><strong>".$i."</strong> <a href='#' style='color:#000000;' data-toggle='popover' title='Definition of Compliant' data-content='Compliant schedules have at least 3.5 units, as per UR requirements.'>Compliant Schedules Generated</a></h1>";?>
-				</div><div class="col-sm-6"><h1><button class="btn btn-success pull-right btn-expand glyphicon glyphicon-collapse-down" type="button"> Expand All Schedules</button></h1></div></div>
+			<div class="row col-md-12">				
+				<div class="row col-sm-12"><div class="col-sm-6"><?php echo "<h1><strong>".count($finalSchedules)."</strong>&nbsp;Schedules Generated</h1>";?>
+				</div><div class="col-sm-6"><h1 class="pull-right"><a style="color:black;" href="/sched/?i=<?php echo urlencode(json_encode($get));?>"><button class="btn btn-sucess" type="button">Edit Sections</button></a>
+				&nbsp;&nbsp;<button class="btn btn-success btn-expand glyphicon glyphicon-collapse-down" type="button"> Expand All Schedules</button></h1></div></div>
 				<hr width="100%" />
 				
 				<div class="panel-group">
 					<?php 
 					$num = 0;
 					foreach($finalSchedules as $k=>$a){
-						if($a->getNumUnits() < 3.5){
-							continue;
-						}
 						if($num%4==0){
 							echo "<div class='row' style='margin:2px;'>";
 						}
@@ -142,7 +135,7 @@ function sortSched($a, $b){
 						echo "<div class='col-md-3'>";
 						echo "<div class='panel panel-default'>";
 						echo "<div class='panel-heading panel-title' data-toggle='collapse' data-target='#collapse".$num."' style='cursor: pointer;'>";
-						echo "<a data-toggle='collapse' href='#collapse".$num."'>".$a->getNumClasses()." classes, ".$a->getNumUnits()." units, with ".reset($a->getCPD())." classes every ".key($a->getCPD())." and score ".$a->getScore()."</a></div>";
+						echo "<a data-toggle='collapse' href='#collapse".$num."'>".$a->getNumClasses()." classes, ".$a->getNumUnits()." units, with ".reset($a->getCPD())." classes every ".key($a->getCPD())."</a></div>";
 						echo "<div class='panel-collapse collapse panel-body".$in."' id='collapse".$num."'>";
 						echo "<table class='table table-condensed table-responsive'>";
 						foreach($a->getSchedule() as $b){

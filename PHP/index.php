@@ -1,3 +1,18 @@
+<?php
+if(isset($_GET["i"])){
+	$get = json_decode(urldecode($_GET["i"]), true);
+}
+$courses = array();
+foreach($get as $k=>$v){
+	if($v["Course Name"] != ""){
+		array_push($courses, $v);
+	}
+}
+$get = $courses;
+unset($courses);
+$sections = 1;
+?>
+
 <html>
 	<head>
 		<title>Student Schedule Creator</title>
@@ -20,46 +35,154 @@
 			<h2>Make a Schedule</h2>
 			<div class="row">
 				<div class="panel-group" id="all-courses">
-					<div class="panel panel-default" style="margin-bottom:5px;">
-						<div class="panel-heading">
-							<h1 class="panel-title pull-left" id="course1"></h1>
-							<form class = "form-inline pull-left course-control" role="form" autocomplete="off">
-								<div class="entry form-group course-control">
-									 Name<label style="color:red;">*</label>: <input id="name1" class="form-control name" name="fields[]" type="text" placeholder="Enter Course Name"/>
-									 Field of Study: <input class="form-control fos" name="fields[]" type="text" placeholder="ex. CMSC" style="text-transform: uppercase" maxlength="4"/>
-									 Course Number: <input class="form-control cn" name="fields[]" type="text" placeholder="ex. 101" maxlength="3"/>
-									 Number of Units: <input class="form-control units" name="fields[]" type="text" placeholder="ex. 1" maxlength="3"/>
-								</div>
-							</form>
-							<button class="btn btn-success btn-add pull-right btn-add-course" type="button">
-								<span class="glyphicon glyphicon-plus"></span>
-							</button>
-							<div class="clearfix"></div>
-						</div>
-						
-						<div class="panel-body">
-						<h3>Enter Section Details</h3>
-						<div class="col-md-4">
-							<div class="panel panel-default">
+					<?php
+						if(!isset($get)){
+							echo '
+							<div class="panel panel-default" style="margin-bottom:5px;">
 								<div class="panel-heading">
-									<h1 class="panel-title pull-left new-course" id="course1">Section 1</h1>
-									<button class="btn btn-success btn-add pull-right btn-add-section glyphicon glyphicon-plus" type="button">
+									<h1 class="panel-title pull-left" id="course1"></h1>
+									<form class = "form-inline pull-left course-control" role="form" autocomplete="off">
+										<div class="entry form-group course-control">
+											 Name<label style="color:red;">*</label>: <input id="name1" class="form-control name" name="fields[]" type="text" placeholder="Enter Course Name"/>
+											 Field of Study: <input class="form-control fos" name="fields[]" type="text" placeholder="ex. CMSC" style="text-transform: uppercase" maxlength="4"/>
+											 Course Number: <input class="form-control cn" name="fields[]" type="text" placeholder="ex. 101" maxlength="3"/>
+											 Number of Units: <input class="form-control units" name="fields[]" type="text" placeholder="ex. 1" maxlength="3"/>
+										</div>
+									</form>
+									<button class="btn btn-success btn-add pull-right btn-add-course" type="button">
+										<span class="glyphicon glyphicon-plus"></span>
 									</button>
 									<div class="clearfix"></div>
 								</div>
+								
 								<div class="panel-body">
-									<form class = "form section-control" role="form" autocomplete="off">
-										<input type="text" placeholder="CRN Number" class="form-control crn" style="margin:1px;"/>
+									<h3>Enter Section Details</h3>
+									<div class="col-md-4">
+										<div class="panel panel-default">
+											<div class="panel-heading">
+												<h1 class="panel-title pull-left new-course" id="course1">Section 1</h1>
+												<button class="btn btn-success btn-add pull-right btn-add-section glyphicon glyphicon-plus" type="button">
+												</button>
+												<div class="clearfix"></div>
+											</div>
+											<div class="panel-body">
+												<form class = "form section-control" role="form" autocomplete="off">
+													<input type="text" placeholder="CRN Number" class="form-control crn" style="margin:1px;"/>
+													<div>
+														<div class="row col-md-12 input-group" style="margin:1px;">
+															<select class="form-control day">
+																<option>Monday</option>
+																<option>Tuesday</option>
+																<option>Wednesday</option>
+																<option>Thursday</option>
+																<option>Friday</option>
+																<option>Saturday</option>
+																<option>Sunday</option>
+															</select>
+															<span class="input-group-btn">
+																<button class="btn btn-success btn-add btn-add-time glyphicon glyphicon-plus" type="button">
+																</button>
+														   </span>
+														</div>
+														<div class="row col-md-12">
+															<div class="col-md-6 bootstrap-timepicker timepicker">
+																<label class="control-label">From:</label>
+																<input id="timepicker1" type="text" class="form-control input-small from time">
+																<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+															</div>
+															<div class="col-md-6 bootstrap-timepicker timepicker">
+																<label class="control-label">To:</label>
+																<input id="timepicker2" type="text" class="form-control input-small to time">
+																<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+															</div>
+														</div>
+													</div>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							';
+						}
+						foreach($get as $k=>$v){
+							echo '
+							<div class="panel panel-default" style="margin-bottom:5px;">
+								<div class="panel-heading">
+									<h1 class="panel-title pull-left" id="course1">'.$v["Course Name"].'</h1><br/><hr id="hr1" style="width:100%; border-top:1px solid #FFFFFF;">
+									<form class = "form-inline pull-left course-control" role="form" autocomplete="off">
+										<div class="entry form-group course-control">
+											 Name<label style="color:red;">*</label>: <input id="name1" class="form-control name" name="fields[]" type="text" placeholder="Enter Course Name" value="'.$v["Course Name"].'"/>
+											 Field of Study: <input class="form-control fos" name="fields[]" type="text" placeholder="ex. CMSC" style="text-transform: uppercase" maxlength="4" value="'.$v["Field of Study"].'"/>
+											 Course Number: <input class="form-control cn" name="fields[]" type="text" placeholder="ex. 101" maxlength="3" value="'.$v["course number"].'"/>
+											 Number of Units: <input class="form-control units" name="fields[]" type="text" placeholder="ex. 1" maxlength="3" value="'.$v["Units"].'"/>
+										</div>
+									</form>
+									<button class="btn btn-success btn-add pull-right btn-add-course" type="button">
+										<span class="glyphicon glyphicon-plus"></span>
+									</button>
+									<div class="clearfix"></div>
+								</div>
+								
+								<div class="panel-body">
+									<h3>Enter Section Details</h3>';
+							foreach($v["sections"] as $k2=>$v2){
+								if(!isset($v2["crn"])){
+									$v2["crn"] = "";
+								}
+								echo '
+									<div class="col-md-4">
+										<div class="panel panel-default">
+											<div class="panel-heading">
+												<h1 class="panel-title pull-left new-course" id="course1">Section '.$sections.'</h1>
+												<button class="btn btn-success btn-add pull-right btn-add-section glyphicon glyphicon-plus" type="button">
+												</button>
+												<div class="clearfix"></div>
+											</div>
+											<div class="panel-body">
+												<form class = "form section-control" role="form" autocomplete="off">
+													<input type="text" placeholder="CRN Number" class="form-control crn" style="margin:1px;" value="'.$v2["crn"].'"/>';
+								foreach($v2 as $k3=>$v3){
+									if(isset($v3["day"]) && isset($v3["to"]) && isset($v3["from"])){
+										echo '
 										<div>
 											<div class="row col-md-12 input-group" style="margin:1px;">
 												<select class="form-control day">
-													<option>Monday</option>
-													<option>Tuesday</option>
-													<option>Wednesday</option>
-													<option>Thursday</option>
-													<option>Friday</option>
-													<option>Saturday</option>
-													<option>Sunday</option>
+													<option ';
+													if($v3["day"] == "Monday"){
+														echo "selected=\"selected\"";
+													}
+													echo '>Monday</option>
+													<option ';
+													if($v3["day"] == "Tuesday"){
+														echo "selected=\"selected\"";
+													}
+													echo '>Tuesday</option>
+													<option ';
+													if($v3["day"] == "Wednesday"){
+														echo "selected=\"selected\"";
+													}
+													echo '>Wednesday</option>
+													<option ';
+													if($v3["day"] == "Thursday"){
+														echo "selected=\"selected\"";
+													}
+													echo '>Thursday</option>
+													<option ';
+													if($v3["day"] == "Friday"){
+														echo "selected=\"selected\"";
+													}
+													echo '>Friday</option>
+													<option ';
+													if($v3["day"] == "Saturday"){
+														echo "selected=\"selected\"";
+													}
+													echo '>Saturday</option>
+													<option ';
+													if($v3["day"] == "Sunday"){
+														echo "selected=\"selected\"";
+													}
+													echo '>Sunday</option>
 												</select>
 												<span class="input-group-btn">
 													<button class="btn btn-success btn-add btn-add-time glyphicon glyphicon-plus" type="button">
@@ -69,22 +192,30 @@
 											<div class="row col-md-12">
 												<div class="col-md-6 bootstrap-timepicker timepicker">
 													<label class="control-label">From:</label>
-													<input id="timepicker1" type="text" class="form-control input-small from time">
+													<input id="timepicker1" type="text" class="form-control input-small from time" value="'.$v3["from"].'">
 													<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
 												</div>
 												<div class="col-md-6 bootstrap-timepicker timepicker">
 													<label class="control-label">To:</label>
-													<input id="timepicker2" type="text" class="form-control input-small to time">
+													<input id="timepicker2" type="text" class="form-control input-small to time" value="'.$v3["to"].'">
 													<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
 												</div>
 											</div>
-										</div>
-									</form>
+										</div>';
+									}
+								}
+								echo '
+										</form>
+									</div>
 								</div>
+							</div>';
+								$sections += 1;
+							}
+							echo '
 							</div>
-						</div>
-					</div>
-					</div>
+						</div>';
+						}
+					?>
 				</div>
 			</div>
 			<div class="row col-sm-6">
@@ -163,8 +294,8 @@
 			var $courseTemplate = $(".course-template");
 			var $sectionTemplate = $(".section-template");
 			var $timeTemplate = $(".time-template");
-			var numCourse = 1;
-			var numSection = 1;
+			var numCourse = <?php if(isset($get)){echo count($get);} else{echo "1";}?>;
+			var numSection = <?php echo $sections-1;?>;
 			
 			$(document).on("click", ".btn-add-course", function (e) {
 				var $newPanel = $courseTemplate.clone();
@@ -266,8 +397,7 @@
 				});
 				var json = JSON.stringify(output);
 				console.log(output);
-				var win = window.open("/sched/makeSched.php?i="+encodeURIComponent(json), '_blank');
-				win.focus();
+				window.location.assign("/sched/makeSched.php?i="+encodeURIComponent(json));
 			});
 			
 			$(document).on('keyup', ".name", function(e){

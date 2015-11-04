@@ -47,7 +47,7 @@ class Schedule{
 	public function getSchedule(){
 		$arr = $this->listOfSections;
 		usort($arr, function($a, $b){
-			return (reset($a->meetingTime)['from'] < reset($b->meetingTime)['from']) ? -1 : 1;
+				return (strtotime("+".($a->getEarliestTime()[0])." days", $a->getEarliestTime()[1]) < strtotime("+".($b->getEarliestTime()[0])." days", $b->getEarliestTime()[1])) ? -1 : 1;
 		});
 		return $arr;
 	}
