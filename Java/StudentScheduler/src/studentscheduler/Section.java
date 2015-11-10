@@ -26,12 +26,11 @@ public class Section extends Course {
         temp.put("from", from);
         temp.put("to", to);
         meetingTime.put(day, temp);
-        
         if (earliestTime == null) {
             earliestTime = new int[2];
             earliestTime[0] = dayToInt(day);
             earliestTime[1] = from;
-        } 
+        }
         else if (earliestTime[1] > from) {
             earliestTime[0] = dayToInt(day);
             earliestTime[1] = from;
@@ -69,12 +68,13 @@ public class Section extends Course {
 
     @Override
     public String toString(){
+        System.out.println(Arrays.toString(earliestTime));
         Calendar t = Calendar.getInstance();
-        t.setTimeInMillis(getEarliestTime()[1]);
+        t.setTimeInMillis(earliestTime[1]);
         String ampm = t.get(Calendar.AM_PM)==0 ? "AM":"PM";
         String minutes = String.format("%02d", t.get(Calendar.MINUTE));
         String time = t.get(Calendar.HOUR)+":"+minutes+" "+ampm;
-        return getCourseTitle()+" every "+intToDay(getEarliestTime()[0])+" at "+time;
+        return getCourseTitle()+" every "+intToDay(earliestTime[0])+" at "+time;
     }
     
     public int[] getEarliestTime() {

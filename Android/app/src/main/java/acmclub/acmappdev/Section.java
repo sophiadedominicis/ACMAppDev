@@ -2,7 +2,7 @@
 package acmclub.acmappdev;
 
 import java.util.*;
-import static studentscheduler.strtotime.strtotime;
+import static acmclub.acmappdev.strtotime.strtotime;
 
 public class Section extends Course {
     private int[] earliestTime;
