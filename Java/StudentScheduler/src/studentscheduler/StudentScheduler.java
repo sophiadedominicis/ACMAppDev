@@ -12,7 +12,7 @@ import java.util.*;
  * @author Mike
  */
 public class StudentScheduler {
-    public static ArrayList<Schedule> allSchedules = new ArrayList<Schedule>();
+    public static ArrayList<Schedule> allSchedules = new ArrayList<>();
     public static ArrayList<Section> sections = new ArrayList();
     /**
      * @param args the command line arguments
@@ -68,11 +68,11 @@ public class StudentScheduler {
     private static Section addMoreSections(String courseName, Scanner scan){
         Section tempSection = new Section(courseName, "", 0, 1, "");
         addMoreTime(tempSection, scan);
-        System.out.println("Do you want to add another time for that section?\t [Y/N]");
+        System.out.println("Do you want to add another day/time for that section?\t [Y/N]");
         String answer = scan.nextLine();
         while(answer.toLowerCase().equals("y")){
             addMoreTime(tempSection, scan);
-            System.out.println("Do you want to add another time for that section?\t [Y/N]");
+            System.out.println("Do you want to add another day/time for that section?\t [Y/N]");
             answer = scan.nextLine();
         }
         

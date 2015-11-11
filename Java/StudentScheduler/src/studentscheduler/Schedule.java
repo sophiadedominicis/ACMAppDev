@@ -52,7 +52,7 @@ public class Schedule {
     public String toString(){
         StringBuilder sb = new StringBuilder();
         for(Section a : listOfSections){
-            sb.append(a.toString());
+            sb.append(a);
             sb.append("\n");
         }
         return sb.toString();

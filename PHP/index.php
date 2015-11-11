@@ -1,11 +1,11 @@
 <?php
+$courses = array();
 if(isset($_GET["i"])){
 	$get = json_decode(urldecode($_GET["i"]), true);
-}
-$courses = array();
-foreach($get as $k=>$v){
-	if($v["Course Name"] != ""){
-		array_push($courses, $v);
+	foreach($get as $k=>$v){
+		if($v["Course Name"] != ""){
+			array_push($courses, $v);
+		}
 	}
 }
 $get = $courses;
@@ -20,7 +20,7 @@ $sections = 1;
 		<link rel="stylesheet" href="css/bootstrap.min.css"></link>
         <script type="text/javascript" src="js/jquery.min.js"></script>
         <script type="text/javascript" src="js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="js/bootstrap-timepicker.js"></script>
+		<script src="//cdn.jsdelivr.net/jquery.scrollto/2.1.2/jquery.scrollTo.min.js"></script>
 		<script>
 		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -36,13 +36,13 @@ $sections = 1;
 			<div class="row">
 				<div class="panel-group" id="all-courses">
 					<?php
-						if(!isset($get)){
+						if(count($get)<1){
 							echo '
 							<div class="panel panel-default" style="margin-bottom:5px;">
 								<div class="panel-heading">
 									<h1 class="panel-title pull-left" id="course1"></h1>
 									<form class = "form-inline pull-left course-control" role="form" autocomplete="off">
-										<div class="entry form-group course-control">
+										<div class="entry form-group course-control has-error">
 											 Name<label style="color:red;">*</label>: <input id="name1" class="form-control name" name="fields[]" type="text" placeholder="Enter Course Name"/>
 											 Field of Study: <input class="form-control fos" name="fields[]" type="text" placeholder="ex. CMSC" style="text-transform: uppercase" maxlength="4"/>
 											 Course Number: <input class="form-control cn" name="fields[]" type="text" placeholder="ex. 101" maxlength="3"/>
@@ -109,10 +109,10 @@ $sections = 1;
 							echo '
 							<div class="panel panel-default" style="margin-bottom:5px;">
 								<div class="panel-heading">
-									<h1 class="panel-title pull-left" id="course1">'.$v["Course Name"].'</h1><br/><hr id="hr1" style="width:100%; border-top:1px solid #FFFFFF;">
+									<h1 class="panel-title pull-left" id="course'.$k.'">'.$v["Course Name"].'</h1><br/><hr id="hr'.$k.'" style="width:100%; border-top:1px solid #FFFFFF;">
 									<form class = "form-inline pull-left course-control" role="form" autocomplete="off">
 										<div class="entry form-group course-control">
-											 Name<label style="color:red;">*</label>: <input id="name1" class="form-control name" name="fields[]" type="text" placeholder="Enter Course Name" value="'.$v["Course Name"].'"/>
+											 Name<label style="color:red;">*</label>: <input id="name'.$k.'" class="form-control name" name="fields[]" type="text" placeholder="Enter Course Name" value="'.$v["Course Name"].'"/>
 											 Field of Study: <input class="form-control fos" name="fields[]" type="text" placeholder="ex. CMSC" style="text-transform: uppercase" maxlength="4" value="'.$v["Field of Study"].'"/>
 											 Course Number: <input class="form-control cn" name="fields[]" type="text" placeholder="ex. 101" maxlength="3" value="'.$v["course number"].'"/>
 											 Number of Units: <input class="form-control units" name="fields[]" type="text" placeholder="ex. 1" maxlength="3" value="'.$v["Units"].'"/>
@@ -227,7 +227,7 @@ $sections = 1;
 					<div class="panel-heading">
 						<h1 class="panel-title pull-left" id="course1"></h1>
 						<form class = "form-inline pull-left course-control" role="form" autocomplete="off">
-							<div class="entry form-group course-control">
+							<div class="entry form-group course-control has-error">
 								 Name<label style="color:red;">*</label>: <input id="name1" class="form-control name" name="fields[]" type="text" placeholder="Enter Course Name" required="required"/>
 								 Field of Study: <input class="form-control fos" name="fields[]" type="text" placeholder="ex. CMSC" style="text-transform: uppercase" maxlength="4"/>
 								 Course Number: <input class="form-control cn" name="fields[]" type="text" placeholder="ex. 101" maxlength="3"/>
@@ -290,6 +290,26 @@ $sections = 1;
 				</div>
 			</div>
 		</div>
+		<div id="no-name-error" class="modal fade" tabindex="-1" role="dialog">
+			<div class="modal-dialog has-error">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">×</button>
+						<h3>Error: No Course Name Entered!</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="bad-time-error" class="modal fade" tabindex="-1" role="dialog">
+			<div class="modal-dialog has-error">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">×</button>
+						<h3>Error: Incorrect Time Entered!</h3>
+					</div>
+				</div>
+			</div>
+		</div>
 		<script>
 			var $courseTemplate = $(".course-template");
 			var $sectionTemplate = $(".section-template");
@@ -300,7 +320,6 @@ $sections = 1;
 			$(document).on("click", ".btn-add-course", function (e) {
 				var $newPanel = $courseTemplate.clone();
 				numCourse++;
-				console.log("add course");
 				$newPanel.find("h1").attr("id", "course"+numCourse);
 				$newPanel.find("#name1").attr("id", "name"+numCourse);
 				$newPanel.find("h1").each(function(){
@@ -308,24 +327,43 @@ $sections = 1;
 							$(this).text("Section "+(++numSection));
 						}
 				});
+				$newPanel.removeClass("course-template");
 				$("#all-courses").append($newPanel);
+				$('body').scrollTo($newPanel, 500);
 			});
 			
 			$(document).on("click", ".btn-add-section", function (e) {
 				var $newPanel = $sectionTemplate.clone();
-				console.log("add section");
 				$newPanel.find("h1").text("Section "+(++numSection));
 				$(e.target).parent().parent().parent().parent().append($newPanel);
+				$('body').scrollTo($newPanel, 500);
 			});
 			
 			$(document).on("click", ".btn-add-time", function (e) {
 				var $newPanel = $timeTemplate.clone();
-				console.log("add time");
+				var lastDay = $(e.target).parent().parent().parent().parent().last().find("select").last().val();
+				var fromTime = $(e.target).parent().parent().parent().last().find("input").first().val();
+				var toTime = $(e.target).parent().parent().parent().find("input").last().val();
+				var nextDay = lastDay;
+				if(lastDay == "Monday"){
+					nextDay = "Wednesday";
+				}
+				else if(lastDay == "Wednesday" || lastDay == "Thursday"){
+					nextDay = "Friday";
+				}
+				else if(lastDay == "Tuesday"){
+					nextDay = "Thursday"
+				}
+				$newPanel.find("input.from").val(fromTime);
+				$newPanel.find("input.to").val(toTime);
+				$newPanel.find("select").val(nextDay);
+				$newPanel.removeClass("time-template");
 				$(e.target).parent().parent().parent().parent().append($newPanel);
 			});
 			
 			$(document).on("click", ".btn-submit", function (e) {
-				console.log("submit");
+				var name = true;
+				var time = true;
 				var $form = $("form");
 				var output = {};
 				var courseNum = -1;
@@ -343,6 +381,9 @@ $sections = 1;
 						$(this).find("input, select").each(function(){
 							var d = $(this).attr("class");
 							if(d.indexOf("name")>-1){
+								if($(this).val() == "" && !($(this).parent().parent().parent().parent().attr("class").indexOf("template")>-1)){
+									name = false;
+								}
 								output[courseNum]["Course Name"] = $(this).val();
 							}
 							if(d.indexOf("fos")>-1){
@@ -381,10 +422,20 @@ $sections = 1;
 								output[courseNum]["sections"][numSection][numDay]["day"] = $(this).val();
 							}
 							if(d.indexOf("to")>-1){
-								output[courseNum]["sections"][numSection][numDay]["to"] = $(this).val();
+								if($(this).parent().attr("class").indexOf("has-error")>-1){
+									time = false;
+								}
+								else{
+									output[courseNum]["sections"][numSection][numDay]["to"] = $(this).val();
+								}
 							}
 							if(d.indexOf("from")>-1){
-								output[courseNum]["sections"][numSection][numDay]["from"] = $(this).val();
+								if($(this).parent().attr("class").indexOf("has-error")>-1){
+									time = false;
+								}
+								else{
+									output[courseNum]["sections"][numSection][numDay]["from"] = $(this).val();
+								}
 							}
 							var a = output[courseNum]["sections"][numSection][numDay];
 							if(a["day"] != undefined && a["to"] != undefined && a["from"] != undefined){
@@ -395,20 +446,126 @@ $sections = 1;
 						numSection++;
 					}
 				});
-				var json = JSON.stringify(output);
-				console.log(output);
-				window.location.assign("/sched/makeSched.php?i="+encodeURIComponent(json));
+				if(!name){
+					$('#no-name-error').modal({
+						show: true
+					});
+					$('#no-name-error').on('hidden', function(){
+						$('body').scrollTo($(".has-error").first(), 500);
+					});
+				}
+				else if(!time){
+					$('#bad-time-error').modal({
+						show: true
+					});
+				}
+				else{
+					var json = JSON.stringify(output);
+					console.log(output);
+					window.location.assign("/sched/makeSched.php?i="+encodeURIComponent(json));
+				}
 			});
 			
 			$(document).on('keyup', ".name", function(e){
 				var id = e.target.getAttribute("id");
 				id = id.substring(5, id.length-1);
 				$('#course'+id).html($('#name'+id).val());
+				if($('#name'+id).val() == ""){
+					$('#name'+id).parent().addClass("has-error");
+				}
+				else if ($('#name'+id).parent().attr("class").indexOf("has-error")>-1){
+					$('#name'+id).parent().removeClass("has-error");
+				}
 				if(!$("#hr"+id).length){
 					$("<br/><hr id=\"hr"+id+"\" style=\"width:100%; border-top:1px solid #FFFFFF;\"/>").insertAfter("#course"+id);
 				}
 			  });
-			  $('.time').timepicker({minuteStep:5, defaultTime:"12:00 AM"});
+			  
+			  $(document).on('blur', ".time", function(e){
+				  var val = $(e.target).val();
+				  val = val.replace(/\s+/g, '');
+				  val = val.replace(/\:/g, '');
+				  var finalTime = "";
+				  if(val.substring(val.length-2, val.length).toLowerCase() == "am"){
+					  if(val.length-2 == 3){
+						  if(parseInt(val.substring(0, 1))<1 || parseInt(val.substring(1, 3))>59){
+							  $(e.target).parent().addClass("has-error");
+							  finalTime = $(e.target).val();
+						  }
+						  else{
+							finalTime = val.substring(0, 1)+":"+val.substring(1, 3)+" AM";
+						  }
+					  }
+					  else if(val.length-2 == 4){
+						  if(parseInt(val.substring(0, 1))<1 || parseInt(val.substring(0, 2))>12 || parseInt(val.substring(2, 4))>59){
+							  $(e.target).parent().addClass("has-error");
+							  finalTime = $(e.target).val();
+						  }
+						  else{
+							finalTime = val.substring(1, 2)+":"+val.substring(2, 4)+" AM";
+						  }
+					  }
+					  else{
+						  $(e.target).parent().addClass("has-error");
+					  }
+				  }
+				  else if(val.substring(val.length-2, val.length).toLowerCase() == "pm"){
+					  if(val.length-2 == 3){
+						  if(parseInt(val.substring(0, 1))<1 || parseInt(val.substring(1, 3))>59){
+							  $(e.target).parent().addClass("has-error");
+							  finalTime = $(e.target).val();
+						  }
+						  else{
+							finalTime = val.substring(0, 1)+":"+val.substring(1, 3)+" PM";
+						  }
+					  }
+					  else if(val.length-2 == 4){
+						  if(parseInt(val.substring(0, 1))<1 || parseInt(val.substring(0, 2))>12 || parseInt(val.substring(2, 4))>59){
+							  $(e.target).parent().addClass("has-error");
+							  finalTime = $(e.target).val();
+						  }
+						  else{
+							finalTime = val.substring(1, 2)+":"+val.substring(2, 4)+" PM";
+						  }
+					  }
+					  else{
+						  $(e.target).parent().addClass("has-error");
+					  }
+				  }
+				  else{
+					  if(val.length == 3){
+						  if(parseInt(val.substring(1, 3))>59){
+							$(e.target).parent().addClass("has-error");
+							finalTime = $(e.target).val();
+						  }
+						  else{
+							finalTime = val.substring(0, 1)+":"+val.substring(1, 3)+" AM";
+						  }
+					  }
+					  else if(val.length == 4){
+						  if(parseInt(val.substring(2, 4))>59){
+							$(e.target).parent().addClass("has-error");
+							finalTime = $(e.target).val();
+						  }
+						  else{
+							  var ampm = (parseInt(val.substring(0, 2))<=12) ? " AM" : " PM";
+							  var hour = parseInt(val.substring(0, 2))<=12 ? parseInt(val.substring(0, 2)) : parseInt(val.substring(0, 2))-12;
+							  finalTime = hour+":"+val.substring(2, 4)+ampm;
+						  }
+					  }
+					  else{
+						  $(e.target).parent().addClass("has-error");
+					  }
+				  }
+				  
+				$(e.target).val(finalTime);
+			});
+			$(document).on('hidden.bs.modal', '#bad-time-error', function(){
+				$('body').scrollTo($(".has-error").first(), 500);
+			});
+			$(document).on('hidden.bs.modal', '#no-name-error', function(){
+				$('body').scrollTo($(".has-error").first(), 500);
+			});
 		</script>
 	</body>
 </html>

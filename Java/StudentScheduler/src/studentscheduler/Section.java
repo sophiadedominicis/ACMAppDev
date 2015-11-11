@@ -5,8 +5,8 @@ import java.util.*;
 import static studentscheduler.strtotime.strtotime;
 
 public class Section extends Course {
-    private int[] earliestTime;
-    private int[] latestTime;
+    private int[] earliestTime = new int[2];
+    private int[] latestTime = new int[2];
     private boolean meetsFriday;
     public HashMap<String, HashMap<String, Integer>> meetingTime = new HashMap<>();
     private String crn;
@@ -26,8 +26,7 @@ public class Section extends Course {
         temp.put("from", from);
         temp.put("to", to);
         meetingTime.put(day, temp);
-        if (earliestTime == null) {
-            earliestTime = new int[2];
+        if (earliestTime[0] == 0 && earliestTime[1] == 0) {
             earliestTime[0] = dayToInt(day);
             earliestTime[1] = from;
         }
@@ -36,8 +35,7 @@ public class Section extends Course {
             earliestTime[1] = from;
         }
         
-        if (latestTime == null) {
-            latestTime = new int[2];
+        if (latestTime[1] == 0 && latestTime[1] == 0) {
             latestTime[0] = dayToInt(day);
             latestTime[1] = to;
         } 
@@ -68,7 +66,6 @@ public class Section extends Course {
 
     @Override
     public String toString(){
-        System.out.println(Arrays.toString(earliestTime));
         Calendar t = Calendar.getInstance();
         t.setTimeInMillis(earliestTime[1]);
         String ampm = t.get(Calendar.AM_PM)==0 ? "AM":"PM";
@@ -93,7 +90,7 @@ public class Section extends Course {
         return crn;
     }
 
-    //Return number of course units for course entry
+    
     public double getNumUnits(){
         return super.getUnits();
     }
