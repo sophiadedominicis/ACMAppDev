@@ -37,6 +37,7 @@ $sections = 1;
 				<div class="panel-group" id="all-courses">
 					<?php
 						if(count($get)<1){
+							$sections += 1;
 							echo '
 							<div class="panel panel-default" style="margin-bottom:5px;">
 								<div class="panel-heading">
@@ -52,6 +53,9 @@ $sections = 1;
 									<button class="btn btn-success btn-add pull-right btn-add-course" type="button">
 										<span class="glyphicon glyphicon-plus"></span>
 									</button>
+									<button class="btn btn-danger btn-remove pull-right" type="button">
+										<span class="glyphicon glyphicon-minus"></span>
+									</button>
 									<div class="clearfix"></div>
 								</div>
 								
@@ -61,7 +65,10 @@ $sections = 1;
 										<div class="panel panel-default">
 											<div class="panel-heading">
 												<h1 class="panel-title pull-left new-course" id="course1">Section 1</h1>
-												<button class="btn btn-success btn-add pull-right btn-add-section glyphicon glyphicon-plus" type="button">
+												<button class="btn btn-success btn-add pull-right btn-add-section glyphicon glyphicon-plus" type="button" style="line-height: 1!important;">
+												</button>
+												<button class="btn btn-danger btn-remove-section pull-right" type="button" style="line-height: 1!important;">
+													<span class="glyphicon glyphicon-minus"></span>
 												</button>
 												<div class="clearfix"></div>
 											</div>
@@ -121,6 +128,9 @@ $sections = 1;
 									<button class="btn btn-success btn-add pull-right btn-add-course" type="button">
 										<span class="glyphicon glyphicon-plus"></span>
 									</button>
+									<button class="btn btn-danger btn-remove pull-right" type="button">
+										<span class="glyphicon glyphicon-minus"></span>
+									</button>
 									<div class="clearfix"></div>
 								</div>
 								
@@ -134,8 +144,11 @@ $sections = 1;
 									<div class="col-md-4">
 										<div class="panel panel-default">
 											<div class="panel-heading">
-												<h1 class="panel-title pull-left new-course" id="course1">Section '.$sections.'</h1>
-												<button class="btn btn-success btn-add pull-right btn-add-section glyphicon glyphicon-plus" type="button">
+												<h1 class="panel-title pull-left new-course" id="course'.$k.'">Section '.$sections.'</h1>
+												<button class="btn btn-success btn-add pull-right btn-add-section glyphicon glyphicon-plus" type="button" style="line-height: 1!important;">
+												</button>
+												<button class="btn btn-danger btn-remove-section pull-right" type="button" style="line-height: 1!important;">
+													<span class="glyphicon glyphicon-minus"></span>
 												</button>
 												<div class="clearfix"></div>
 											</div>
@@ -237,6 +250,9 @@ $sections = 1;
 						<button class="btn btn-success btn-add pull-right btn-add-course" type="button">
 							<span class="glyphicon glyphicon-plus"></span>
 						</button>
+						<button class="btn btn-danger btn-remove pull-right" type="button">
+							<span class="glyphicon glyphicon-minus"></span>
+						</button>
 						<div class="clearfix"></div>
 					</div>
 					
@@ -246,7 +262,10 @@ $sections = 1;
 							<div class="panel panel-default">
 								<div class="panel-heading">
 									<h1 class="panel-title pull-left new-course" id="course1">Section 1</h1>
-									<button class="btn btn-success btn-add pull-right btn-add-section glyphicon glyphicon-plus" type="button">
+									<button class="btn btn-success btn-add pull-right btn-add-section glyphicon glyphicon-plus" type="button" style="line-height: 1!important;">
+									</button>
+									<button class="btn btn-danger btn-remove-section pull-right" type="button" style="line-height: 1!important;">
+										<span class="glyphicon glyphicon-minus"></span>
 									</button>
 									<div class="clearfix"></div>
 								</div>
@@ -310,12 +329,76 @@ $sections = 1;
 				</div>
 			</div>
 		</div>
+			<div class="alert alert-warning alert-dismissible hide" id="course-delete" role="alert" style="position:fixed; z-index:500; width:50%; margin:auto;  left:0; right:0; top:20px;">
+				<button type="button" class="close" href="#">&times;</button>
+				<strong>Course Deleted!</strong>&nbsp;<a href="#" class="alert-link pull-right undo">Undo</a>
+			</div>
+			<div class="alert alert-warning alert-dismissible hide" id="section-delete" role="alert" style="position:fixed; z-index:500; width:50%; margin:auto;  left:0; right:0; top:20px;">
+				<button type="button" class="close" href="#">&times;</button>
+				<strong>Section Deleted!</strong>&nbsp;<a href="#" class="alert-link pull-right undo">Undo</a>
+			</div>
+		</div>
 		<script>
 			var $courseTemplate = $(".course-template");
 			var $sectionTemplate = $(".section-template");
 			var $timeTemplate = $(".time-template");
 			var numCourse = <?php if(isset($get)){echo count($get);} else{echo "1";}?>;
 			var numSection = <?php echo $sections-1;?>;
+			var $undo;
+			var $undoParent;
+			$(document).ready(function(){
+				$("#course-delete").hide();
+				$("#course-delete").removeClass("hide");
+				$("#section-delete").hide();
+				$("#section-delete").removeClass("hide");
+			});
+			
+			$(document).on("click", ".btn-remove", function(e){
+				var $hider = $(e.target).parent().parent();
+				while($hider.attr("class").indexOf("panel-default") < 0){
+					$hider = $hider.parent();
+				}
+				$undo = $hider;
+				$hider.remove();
+				numCourse--;
+				$("#course-delete").alert();
+				$("#course-delete").find(".undo").on("click", function(f){
+					f.stopImmediatePropagation();
+					$("#all-courses").append($undo);
+					$('body').scrollTo($undo, 500);
+					$("#course-delete").hide();
+					numCourse++;
+				});
+				$('#course-delete').find(".close").on('click', function () {
+					$("#course-delete").hide();
+				});
+				$("#course-delete").fadeTo(10000, 500).slideUp(500, function(){
+				});
+			});
+			
+			$(document).on("click", ".btn-remove-section", function(e){
+				var $hider = $(e.target).parent().parent();
+				while($hider.attr("class").indexOf("col-md-4") < 0){
+					$hider = $hider.parent();
+				}
+				$undo = $hider;
+				$undoParent = $hider.parent();
+				$hider.remove();
+				numSection--;
+				$("#section-delete").alert();
+				$("#section-delete").find(".undo").on("click", function(f){
+					f.stopImmediatePropagation();
+					$undoParent.append($undo);
+					$('body').scrollTo($undo, 500);
+					numSection++;
+					$("#section-delete").hide();
+				});
+				$('#section-delete').find(".close").on('click', function () {
+					$("#section-delete").hide();
+				});
+				$("#section-delete").fadeTo(10000, 500).slideUp(500, function(){
+				});
+			});
 			
 			$(document).on("click", ".btn-add-course", function (e) {
 				var $newPanel = $courseTemplate.clone();
