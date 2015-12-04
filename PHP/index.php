@@ -87,7 +87,9 @@ $sections = 1;
 																<option>Sunday</option>
 															</select>
 															<span class="input-group-btn">
-																<button class="btn btn-success btn-add btn-add-time glyphicon glyphicon-plus" type="button">
+																<button class="btn btn-danger btn-remove-time glyphicon glyphicon-minus" type="button" style="line-height: 1!important;">
+																</button>
+																<button class="btn btn-success btn-add btn-add-time glyphicon glyphicon-plus" type="button" style="line-height: 1!important;">
 																</button>
 														   </span>
 														</div>
@@ -198,7 +200,9 @@ $sections = 1;
 													echo '>Sunday</option>
 												</select>
 												<span class="input-group-btn">
-													<button class="btn btn-success btn-add btn-add-time glyphicon glyphicon-plus" type="button">
+													<button class="btn btn-danger btn-remove-time glyphicon glyphicon-minus" type="button" style="line-height: 1!important;">
+													</button>
+													<button class="btn btn-success btn-add btn-add-time glyphicon glyphicon-plus" type="button" style="line-height: 1!important;">
 													</button>
 											   </span>
 											</div>
@@ -284,7 +288,9 @@ $sections = 1;
 													<option>Sunday</option>
 												</select>
 												<span class="input-group-btn">
-													<button class="btn btn-success btn-add btn-add-time glyphicon glyphicon-plus" type="button">
+													<button class="btn btn-danger btn-remove-time glyphicon glyphicon-minus" type="button" style="line-height: 1!important;">
+													</button>
+													<button class="btn btn-success btn-add btn-add-time glyphicon glyphicon-plus" type="button" style="line-height: 1!important;">
 													</button>
 											   </span>
 											</div>
@@ -337,6 +343,10 @@ $sections = 1;
 				<button type="button" class="close" href="#">&times;</button>
 				<strong>Section Deleted!</strong>&nbsp;<a href="#" class="alert-link pull-right undo">Undo</a>
 			</div>
+			<div class="alert alert-warning alert-dismissible hide" id="time-delete" role="alert" style="position:fixed; z-index:500; width:50%; margin:auto;  left:0; right:0; top:20px;">
+				<button type="button" class="close" href="#">&times;</button>
+				<strong>Time Deleted!</strong>&nbsp;<a href="#" class="alert-link pull-right undo">Undo</a>
+			</div>
 		</div>
 		<script>
 			var $courseTemplate = $(".course-template");
@@ -351,6 +361,8 @@ $sections = 1;
 				$("#course-delete").removeClass("hide");
 				$("#section-delete").hide();
 				$("#section-delete").removeClass("hide");
+				$("#time-delete").hide();
+				$("#time-delete").removeClass("hide");
 			});
 			
 			$(document).on("click", ".btn-remove", function(e){
@@ -397,6 +409,29 @@ $sections = 1;
 					$("#section-delete").hide();
 				});
 				$("#section-delete").fadeTo(10000, 500).slideUp(500, function(){
+				});
+			});
+			
+			$(document).on("click", ".btn-remove-time", function(e){
+				var $hider = $(e.target);
+				while($hider.attr("class").indexOf("row col-md-12 input-group") < 0){
+					$hider = $hider.parent();
+				}
+				$hider = $hider.parent();
+				$undo = $hider;
+				$undoParent = $hider.parent();
+				$hider.remove();
+				$("#time-delete").alert();
+				$("#time-delete").find(".undo").on("click", function(f){
+					f.stopImmediatePropagation();
+					$undoParent.append($undo);
+					$('body').scrollTo($undo, 500);
+					$("#time-delete").hide();
+				});
+				$('#time-delete').find(".close").on('click', function () {
+					$("#time-delete").hide();
+				});
+				$("#time-delete").fadeTo(10000, 500).slideUp(500, function(){
 				});
 			});
 			

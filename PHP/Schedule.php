@@ -5,6 +5,8 @@ class Schedule{
 	private $numberOfUnits;
 	private $earliestTime;
 	private $latestTime;
+	private $firstTime;
+	private $lastTime;
 	private $fridayFree;
 	private $score;
 	
@@ -24,19 +26,39 @@ class Schedule{
 		if(!isset($this->earliestTime)){
 			$this->earliestTime = $sec->getEarliestTime();
 		}
-		else if($this->earliestTime[0] < $sec->getEarliestTime()[0]){
-			if($this->earliestTime[1] > $sec->getEarliestTime()[1]){
-				$this->earliestTime = array($sec->getEarliestTime()[0], $sec->getEarliestTime()[1]);
+		if($this->earliestTime[1] > $sec->getEarliestTime()[1]){
+			$this->earliestTime = array($sec->getEarliestTime()[0], $sec->getEarliestTime()[1]);
+		}
+		
+		if(!isset($this->firstTime)){
+			$this->firstTime = $sec->getEarliestTime();
+		}
+		else if($this->firstTime[0] > $sec->getEarliestTime()[0]){
+			$this->firstTime = array($sec->getEarliestTime()[0], $sec->getEarliestTime()[1]);
+		}
+		else if($this->firstTime[0] == $sec->getEarliestTime()[0]){
+			if($this->firstTime[1] > $sec->getEarliestTime()[1]){
+				$this->firstTime = array($sec->getEarliestTime()[0], $sec->getEarliestTime()[1]);
+			}
+		}
+		
+		if(!isset($this->lastTime)){
+			$this->lastTime = $sec->getLastTime();
+		}
+		else if($this->lastTime[0] < $sec->getLastTime()[0]){
+			$this->lastTime = array($sec->getLastTime()[0], $sec->getLastTime()[1]);
+		}
+		else if($this->lastTime[0] == $sec->getLastTime()[0]){
+			if($this->lastTime[1] < $sec->getLastTime()[1]){
+				$this->lastTime = array($sec->getLastTime()[0], $sec->getLastTime()[1]);
 			}
 		}
 		
 		if(!isset($this->latestTime)){
 			$this->latestTime = $sec->getLatestTime();
 		}
-		else if($this->latestTime[0] > $sec->getLatestTime()[0]){
-			if($this->latestTime[1] < $sec->getLatestTime()[1]){
-				$this->latestTime = array($sec->getLatestTime()[0], $sec->getLatestTime()[1]);
-			}
+		if($this->latestTime[1] < $sec->getLatestTime()[1]){
+			$this->latestTime = array($sec->getLatestTime()[0], $sec->getLatestTime()[1]);
 		}
 		
 		if($sec->meetsFriday()){
@@ -119,6 +141,14 @@ class Schedule{
         return $this->numberOfUnits;
     }
 	
+	public function getLastTime(){
+		return $this->lastTime;
+	}
+	
+	public function getFirstTime(){
+		return $this->firstTime;
+	}
+	
 	public function getScore(){
 		$this->setScore();
 		return $this->score;
@@ -163,7 +193,7 @@ class Schedule{
 		$this->score += ($timeScore/$this->numberOfClasses)*.8;
 	}
 	
-	private function dayToInt($day){
+	public function dayToInt($day){
 		switch($day){
 			case "Monday":
 				return 0;
@@ -182,7 +212,7 @@ class Schedule{
 		}
 	}
 	
-	private function intToDay($d){
+	public function intToDay($d){
 		switch($d){
 			case 0:
 				return "Monday";

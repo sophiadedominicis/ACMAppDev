@@ -4,7 +4,10 @@ class Section extends Course{
 	private $latestTime;
 	private $meetsFriday;
 	public $meetingTime;
-	private $crn;	
+	private $lastTime;
+	private $crn;
+	private $color = array(0, 0, 0);
+	
 	public function __construct($courseTitle, $fos, $courseNum, $units, $crn){
 		parent::__construct($courseTitle, $fos, $courseNum, $units);
 		$this->meetsFriday = false;
@@ -19,18 +22,26 @@ class Section extends Course{
 		if(!isset($this->earliestTime)){
 			$this->earliestTime = array($this->dayToInt($day), strtotime($from));
 		}
-		else if($this->earliestTime[0] > $this->dayToInt($day)){
-			if($this->earliestTime[1] > strtotime($from)){
-				$this->earliestTime = array($this->dayToInt($day), strtotime($from));
-			}
+		if($this->earliestTime[1] > strtotime($from)){
+			$this->earliestTime = array($this->dayToInt($day), strtotime($from));
 		}
 
 		if(!isset($this->latestTime)){
 			$this->latestTime = array($this->dayToInt($day), strtotime($from));
 		}
-		else if($this->latestTime[0] < $this->dayToInt($day)){
-			if($this->latestTime[1] < strtotime($from)){
-				$this->latestTime = array($this->dayToInt($day), strtotime($from));
+		if($this->latestTime[1] < strtotime($from)){
+			$this->latestTime = array($this->dayToInt($day), strtotime($from));
+		}
+		
+		if(!isset($this->lastTime)){
+			$this->lastTime = array($this->dayToInt($day), strtotime($to));
+		}
+		else if($this->lastTime[0] < $this->dayToInt($day)){
+			$this->lastTime = array($this->dayToInt($day), strtotime($to));
+		}
+		else if($this->lastTime[0] == $this->dayToInt($day)){
+			if($this->lastTime[1] < strtotime($to)){
+				$this->lastTime = array($this->dayToInt($day), strtotime($to));
 			}
 		}
 	}
@@ -63,8 +74,20 @@ class Section extends Course{
 		return $this->meetsFriday;
 	}
 	
+	public function getLastTime(){
+		return $this->lastTime;
+	}
+	
 	public function getCRN(){
 		return $this->crn;
+	}
+	
+	public function getColor(){
+		return $this->color;
+	}
+	
+	public function setColor($a){
+		$this->color = $a;
 	}
 	
 	public function __toString(){

@@ -13,7 +13,7 @@ import java.util.*;
  */
 public class StudentScheduler {
     public static ArrayList<Schedule> allSchedules = new ArrayList<>();
-    public static ArrayList<Section> sections = new ArrayList();
+    public static ArrayList<Section> allSections = new ArrayList<>();
     /**
      * @param args the command line arguments
      */
@@ -33,8 +33,8 @@ public class StudentScheduler {
         System.out.println("\n\n");
         
         //generate schedules
-        for(int i=0; i<sections.size(); i++){
-            ArrayList<Section> temp = new ArrayList<>(sections);
+        for(int i=0; i<allSections.size(); i++){
+            ArrayList<Section> temp = new ArrayList<>(allSections);
             Section a = temp.get(i);
             int j=0;
             while(j<=i){
@@ -54,32 +54,33 @@ public class StudentScheduler {
     private static void addMoreCourses(Scanner scan){
         System.out.println("Enter a course name");
         String courseName = scan.nextLine();
-        sections.add(addMoreSections(courseName, scan));
+        addMoreSections(courseName, scan);
         System.out.println("Do you want to add another section for that course?\t [Y/N]");
         String answer = scan.nextLine();
         
         while(answer.toLowerCase().equals("y")){
-            sections.add(addMoreSections(courseName, scan));
+            addMoreSections(courseName, scan);
             System.out.println("Do you want to add another section for that course?\t [Y/N]");
             answer = scan.nextLine();
         }
     }
     
-    private static Section addMoreSections(String courseName, Scanner scan){
+    private static void addMoreSections(String courseName, Scanner scan){
         Section tempSection = new Section(courseName, "", 0, 1, "");
-        addMoreTime(tempSection, scan);
+        String[] times = addMoreTime(scan);
+        tempSection.addTime(times[0], times[1], times[2]);
         System.out.println("Do you want to add another day/time for that section?\t [Y/N]");
         String answer = scan.nextLine();
         while(answer.toLowerCase().equals("y")){
-            addMoreTime(tempSection, scan);
+            times = addMoreTime(scan);
+            tempSection.addTime(times[0], times[1], times[2]);
             System.out.println("Do you want to add another day/time for that section?\t [Y/N]");
             answer = scan.nextLine();
         }
-        
-        return tempSection;
+        allSections.add(tempSection);
     }
     
-    private static void addMoreTime(Section tempSection, Scanner scan){
+    private static String[] addMoreTime(Scanner scan){
         System.out.println("Enter day of the week");
         String day = scan.nextLine();
         System.out.println("Enter the start time");
@@ -87,7 +88,8 @@ public class StudentScheduler {
         System.out.println("Enter the end time");
         String to = scan.nextLine();
         
-        tempSection.addTime(day, from, to);
+        String[] returnTime = {day, from, to};
+        return returnTime;
     }
     
     public static void run(ArrayList<Section> sections, ArrayList<Section> curr, Section pick){
@@ -98,6 +100,7 @@ public class StudentScheduler {
                 temp.remove(i--);
             }
         }
+        
         if(temp.isEmpty()){
             Schedule a = new Schedule();
             for(Section b : curr){

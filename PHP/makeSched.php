@@ -22,6 +22,7 @@ foreach($get as $a){
 			foreach($b as $c){
 				$temp->addTime($c["day"], $c["from"], $c["to"]);
 			}
+			$temp->setColor(generateColor(array(127, 127, 127)));
 			array_push($sections, $temp);
 		}
 	}
@@ -69,6 +70,79 @@ function sortSched($a, $b){
 	}
 	return ($a->getScore() > $b->getScore()) ? -1 : 1;
 }
+
+function sortByTime($a, $b){
+	return ($a->getEarliestTime()[1] < $b->getEarliestTime()[1]) ? -1 : 1;
+}
+
+function makeColorString($color){
+	 return $color[0].", ".$color[1].", ".$color[2];
+}
+
+function printWeek($a){
+	$numDays = $a->getLastTime()[0] - $a->getFirstTime()[0] + 1;
+	echo "<table class='table table-condensed table-responsive table-bordered'>";
+	echo "<tr>";
+	echo "<td></td>";
+		for($i = $a->getFirstTime()[0]; $i<($numDays+$a->getFirstTime()[0]); $i++){
+			echo "<td>";
+			echo $a->intToDay($i);
+			echo "</td>";
+		}
+	echo "</tr>";
+	$sections = $a->getSchedule();
+	usort($sections, "sortByTime");
+	$shouldContinue = false;
+	
+	foreach($sections as $secK=>$b){
+		if($shouldContinue){
+			$shouldContinue = false;
+			continue;
+		}
+		$go = !isset($sections[$secK-1]) || $b->getEarliestTime()[1] != $sections[$secK-1]->getEarliestTime()[1];
+		echo "<tr>";
+		echo "<td>";
+		if($go){
+			echo date("g:i a", $b->getEarliestTime()[1]);
+		}
+		echo "</td>";
+		$x = 0;
+		for($i = $a->getFirstTime()[0]; $i<($numDays+$a->getFirstTime()[0]); $i++){
+			if(isset($b->meetingTime[$a->intToDay($i)])){
+				//$minutes = ($v["to"]-$v["from"])/60;
+				//$rows = intval($minutes/5);
+				$x = $i;
+				echo "<td style='background:rgba(".makeColorString($b->getColor()).", .75)'>";
+				echo $b->getCourseTitle();
+			}
+			else if(isset($sections[$secK+1]->meetingTime[$a->intToDay($i)]) && isset($b->meetingTime[$a->intToDay($x)]) && $sections[$secK+1]->meetingTime[$a->intToDay($i)]["from"] == $b->meetingTime[$a->intToDay($x)]["from"]){
+				echo "<td style='background:rgba(".makeColorString($sections[$secK+1]->getColor()).", .75)'>";
+				echo $sections[$secK+1]->getCourseTitle();
+				$shouldContinue = true;
+			}
+			else{
+				echo "<td>";
+			}
+			echo "</td>";
+		}
+		echo "</tr>";
+	}
+	echo "</table>";
+}
+
+function generateColor($c){
+	$red = rand(0, 255);
+	$green = rand(0, 255);
+	$blue = rand(0, 255);
+	
+	if(isset($c)){
+		$red = ($red + $c[0]) / 2;
+        $green = ($green + $c[1]) / 2;
+        $blue = ($blue + $c[2]) / 2;
+	}
+	
+	return array(intval($red), intval($green), intval($blue));
+}
 ?>
 
 <html>
@@ -113,15 +187,57 @@ function sortSched($a, $b){
 			$(this).addClass("glyphicon-collapse-down btn-expand");
 			$(this).removeClass("glyphicon-collapse-up btn-collapse");
 		});
+		
+		$(document).on("click", ".btn-calview", function (e) {
+			$(this).text(' List View');
+			$(this).addClass("glyphicon-list btn-listview");
+			$(this).removeClass("glyphicon-calendar btn-calview");
+			$('#list-view').addClass("hide");
+			$('#calendar-view').removeClass("hide");
+		});
+		
+		$(document).on("click", ".btn-listview", function (e) {
+			$(this).text(' Calendar View');
+			$(this).removeClass("glyphicon-list btn-listview");
+			$(this).addClass("glyphicon-calendar btn-calview");
+			$('#list-view').removeClass("hide");
+			$('#calendar-view').addClass("hide");
+		});
 	</script>
 		<div class="container-fluid">
 			<div class="row col-md-12">				
 				<div class="row col-sm-12"><div class="col-sm-6"><?php echo "<h1><strong>".count($finalSchedules)."</strong>&nbsp;Schedules Generated</h1>";?>
 				</div><div class="col-sm-6"><h1 class="pull-right"><a style="color:black;" href="/sched/?i=<?php echo urlencode(json_encode($get));?>"><button class="btn btn-sucess" type="button">Edit Sections</button></a>
-				&nbsp;&nbsp;<button class="btn btn-success btn-expand glyphicon glyphicon-collapse-down" type="button"> Expand All Schedules</button></h1></div></div>
+				&nbsp;&nbsp;<button class="btn btn-success btn-expand glyphicon glyphicon-collapse-down" type="button"> Expand All Schedules</button>
+				&nbsp;&nbsp;<button class="btn-listview btn glyphicon glyphicon-list" type="button"> List View</button></h1></div></div>
 				<hr width="100%" />
 				
-				<div class="panel-group">
+				<div class="panel-group" id="calendar-view">
+					<?php 
+					$num = 0;
+					foreach($finalSchedules as $k=>$a){
+						if($num%2==0){
+							echo "<div class='row' style='margin:2px;'>";
+						}
+						echo "<div class='col-md-6'>";
+						echo "<div class='panel panel-default'>";
+						echo "<div class='panel-heading panel-title'>";
+						echo "<h4>".$a->getNumClasses()." classes, ".$a->getNumUnits()." units, with ".reset($a->getCPD())." classes every ".key($a->getCPD())."</h4></div>";
+						echo "<div class='panel-body' id='calendar".$num."'>";
+						
+						printWeek($a);
+						
+						echo "</div></div></div>";
+						if($num%2==1){
+							echo "</div>";
+						}
+						$num+=1;
+					}
+					?>
+				</div>
+				</div>
+				
+				<div class="panel-group hide" id="list-view">
 					<?php 
 					$num = 0;
 					foreach($finalSchedules as $k=>$a){
@@ -139,7 +255,7 @@ function sortSched($a, $b){
 						echo "<div class='panel-collapse collapse panel-body".$in."' id='collapse".$num."'>";
 						echo "<table class='table table-condensed table-responsive'>";
 						foreach($a->getSchedule() as $b){
-							echo "<tr><td>";
+							echo "<tr><td style='background:rgba(".makeColorString($b->getColor()).", .75)'>";
 							echo $b;
 							echo "</tr></td>";
 						}
@@ -150,6 +266,7 @@ function sortSched($a, $b){
 						$num += 1;
 					}
 					?>
+				</div>
 				</div>
 			</div>
 		</div>
