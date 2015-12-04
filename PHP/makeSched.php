@@ -71,10 +71,6 @@ function sortSched($a, $b){
 	return ($a->getScore() > $b->getScore()) ? -1 : 1;
 }
 
-function sortByTime($a, $b){
-	return ($a->getEarliestTime()[1] < $b->getEarliestTime()[1]) ? -1 : 1;
-}
-
 function makeColorString($color){
 	 return $color[0].", ".$color[1].", ".$color[2];
 }
@@ -90,35 +86,27 @@ function printWeek($a){
 			echo "</td>";
 		}
 	echo "</tr>";
-	$sections = $a->getSchedule();
-	usort($sections, "sortByTime");
-	$shouldContinue = false;
 	
-	foreach($sections as $secK=>$b){
-		if($shouldContinue){
-			$shouldContinue = false;
-			continue;
+	$sections = $a->getSchedule();
+	
+	
+	$timeArray = array();
+	foreach($sections as $k=>$b){
+		foreach($b->meetingTime as $day=>$times){
+			$timeArray[$times["from"]][$day] = $b;
 		}
-		$go = !isset($sections[$secK-1]) || $b->getEarliestTime()[1] != $sections[$secK-1]->getEarliestTime()[1];
+	}
+	ksort($timeArray);
+	
+	foreach($timeArray as $k=>$v){
 		echo "<tr>";
 		echo "<td>";
-		if($go){
-			echo date("g:i a", $b->getEarliestTime()[1]);
-		}
+		echo date("g:i a", $k);
 		echo "</td>";
-		$x = 0;
 		for($i = $a->getFirstTime()[0]; $i<($numDays+$a->getFirstTime()[0]); $i++){
-			if(isset($b->meetingTime[$a->intToDay($i)])){
-				//$minutes = ($v["to"]-$v["from"])/60;
-				//$rows = intval($minutes/5);
-				$x = $i;
-				echo "<td style='background:rgba(".makeColorString($b->getColor()).", .75)'>";
-				echo $b->getCourseTitle();
-			}
-			else if(isset($sections[$secK+1]->meetingTime[$a->intToDay($i)]) && isset($b->meetingTime[$a->intToDay($x)]) && $sections[$secK+1]->meetingTime[$a->intToDay($i)]["from"] == $b->meetingTime[$a->intToDay($x)]["from"]){
-				echo "<td style='background:rgba(".makeColorString($sections[$secK+1]->getColor()).", .75)'>";
-				echo $sections[$secK+1]->getCourseTitle();
-				$shouldContinue = true;
+			if(isset($v[$a->intToDay($i)])){
+				echo "<td style='background:rgba(".makeColorString($v[$a->intToDay($i)]->getColor()).", .60)'>";
+				echo $v[$a->intToDay($i)]->getCourseTitle();
 			}
 			else{
 				echo "<td>";
@@ -127,7 +115,9 @@ function printWeek($a){
 		}
 		echo "</tr>";
 	}
+	
 	echo "</table>";
+	
 }
 
 function generateColor($c){
