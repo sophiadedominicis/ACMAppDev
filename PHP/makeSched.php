@@ -87,11 +87,8 @@ function printWeek($a){
 		}
 	echo "</tr>";
 	
-	$sections = $a->getSchedule();
-	
-	
 	$timeArray = array();
-	foreach($sections as $k=>$b){
+	foreach($a->getSchedule() as $k=>$b){
 		foreach($b->meetingTime as $day=>$times){
 			$timeArray[$times["from"]][$day] = $b;
 		}
@@ -105,7 +102,7 @@ function printWeek($a){
 		echo "</td>";
 		for($i = $a->getFirstTime()[0]; $i<($numDays+$a->getFirstTime()[0]); $i++){
 			if(isset($v[$a->intToDay($i)])){
-				echo "<td style='background:rgba(".makeColorString($v[$a->intToDay($i)]->getColor()).", .60)'>";
+				echo "<td style='color: #000000; background:rgba(".makeColorString($v[$a->intToDay($i)]->getColor()).", .60)'>";
 				echo $v[$a->intToDay($i)]->getCourseTitle();
 			}
 			else{
@@ -117,7 +114,6 @@ function printWeek($a){
 	}
 	
 	echo "</table>";
-	
 }
 
 function generateColor($c){
@@ -212,7 +208,7 @@ function generateColor($c){
 						echo "<div class='col-md-6'>";
 						echo "<div class='panel panel-default'>";
 						echo "<div class='panel-heading panel-title'>";
-						echo "<h4>".$a->getNumClasses()." classes, ".$a->getNumUnits()." units, with ".reset($a->getCPD())." classes every ".key($a->getCPD())."</h4></div>";
+						echo "<h4 style='color: #000000;'>".$a->getNumClasses()." classes, ".$a->getNumUnits()." units, with ".reset($a->getCPD())." classes every ".key($a->getCPD())."</h4></div>";
 						echo "<div class='panel-body' id='calendar".$num."'>";
 						
 						printWeek($a);
