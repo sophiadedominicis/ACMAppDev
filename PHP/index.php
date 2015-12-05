@@ -363,6 +363,11 @@ $sections = 1;
 				$("#section-delete").removeClass("hide");
 				$("#time-delete").hide();
 				$("#time-delete").removeClass("hide");
+				
+				$("input.from").focus();
+				$("input.from").blur();
+				$("input.to").focus();
+				$("input.to").blur();
 			});
 			
 			$(document).on("click", ".btn-remove", function(e){
@@ -448,6 +453,11 @@ $sections = 1;
 				$newPanel.removeClass("course-template");
 				$("#all-courses").append($newPanel);
 				$('body').scrollTo($newPanel, 500);
+				
+				$newPanel.find("input.from").focus();
+				$newPanel.find("input.from").blur();
+				$newPanel.find("input.to").focus();
+				$newPanel.find("input.to").blur();
 			});
 			
 			$(document).on("click", ".btn-add-section", function (e) {
@@ -455,6 +465,11 @@ $sections = 1;
 				$newPanel.find("h1").text("Section "+(++numSection));
 				$(e.target).parent().parent().parent().parent().append($newPanel);
 				$('body').scrollTo($newPanel, 500);
+				
+				$newPanel.find("input.from").focus();
+				$newPanel.find("input.from").blur();
+				$newPanel.find("input.to").focus();
+				$newPanel.find("input.to").blur();
 			});
 			
 			$(document).on("click", ".btn-add-time", function (e) {
@@ -476,10 +491,21 @@ $sections = 1;
 				$newPanel.find("input.to").val(toTime);
 				$newPanel.find("select").val(nextDay);
 				$newPanel.removeClass("time-template");
+				
 				$(e.target).parent().parent().parent().parent().append($newPanel);
+				
+				$newPanel.find("input.from").focus();
+				$newPanel.find("input.from").blur();
+				$newPanel.find("input.to").focus();
+				$newPanel.find("input.to").blur();
 			});
 			
 			$(document).on("click", ".btn-submit", function (e) {
+				$("input.from").focus();
+				$("input.from").blur();
+				$("input.to").focus();
+				$("input.to").blur();
+				
 				var name = true;
 				var time = true;
 				var $form = $("form");
@@ -526,6 +552,7 @@ $sections = 1;
 						
 						$(this).find("input, select").each(function(){
 							var d = $(this).attr("class");
+							
 							if(output[courseNum]["sections"][numSection] == undefined){
 								output[courseNum]["sections"][numSection] = {};
 							}
@@ -579,7 +606,6 @@ $sections = 1;
 				}
 				else{
 					var json = JSON.stringify(output);
-					console.log(output);
 					window.location.assign("/sched/makeSched.php?i="+encodeURIComponent(json));
 				}
 			});
@@ -599,85 +625,108 @@ $sections = 1;
 				}
 			  });
 			  
-			  $(document).on('blur', ".time", function(e){
-				  var val = $(e.target).val();
-				  val = val.replace(/\s+/g, '');
-				  val = val.replace(/\:/g, '');
-				  var finalTime = "";
-				  if(val.substring(val.length-2, val.length).toLowerCase() == "am"){
-					  if(val.length-2 == 3){
-						  if(parseInt(val.substring(0, 1))<1 || parseInt(val.substring(1, 3))>59){
-							  $(e.target).parent().addClass("has-error");
-							  finalTime = $(e.target).val();
-						  }
-						  else{
+			$(document).on('blur', ".time", function(e){
+				timeCheck(e);
+			});
+			
+			function timeCheck(e){
+				var val = $(e.target).val();
+				var error = false;
+				val = val.replace(/\s+/g, '');
+				val = val.replace(/\:/g, '');
+				var finalTime = "";
+				if(val.substring(val.length-2, val.length).toLowerCase() == "am"){
+					if(val.length-2 == 3){
+						if(parseInt(val.substring(0, 1))<1 || parseInt(val.substring(1, 3))>59){
+							$(e.target).parent().addClass("has-error");
+							error = true;
+							finalTime = $(e.target).val();
+						}
+						else{
 							finalTime = val.substring(0, 1)+":"+val.substring(1, 3)+" AM";
-						  }
-					  }
-					  else if(val.length-2 == 4){
-						  if(parseInt(val.substring(0, 1))<1 || parseInt(val.substring(0, 2))>12 || parseInt(val.substring(2, 4))>59){
-							  $(e.target).parent().addClass("has-error");
-							  finalTime = $(e.target).val();
-						  }
-						  else{
-							finalTime = val.substring(1, 2)+":"+val.substring(2, 4)+" AM";
-						  }
-					  }
-					  else{
-						  $(e.target).parent().addClass("has-error");
-					  }
+						}
 				  }
-				  else if(val.substring(val.length-2, val.length).toLowerCase() == "pm"){
-					  if(val.length-2 == 3){
-						  if(parseInt(val.substring(0, 1))<1 || parseInt(val.substring(1, 3))>59){
-							  $(e.target).parent().addClass("has-error");
-							  finalTime = $(e.target).val();
-						  }
-						  else{
-							finalTime = val.substring(0, 1)+":"+val.substring(1, 3)+" PM";
-						  }
-					  }
-					  else if(val.length-2 == 4){
-						  if(parseInt(val.substring(0, 1))<1 || parseInt(val.substring(0, 2))>12 || parseInt(val.substring(2, 4))>59){
-							  $(e.target).parent().addClass("has-error");
-							  finalTime = $(e.target).val();
-						  }
-						  else{
-							finalTime = val.substring(1, 2)+":"+val.substring(2, 4)+" PM";
-						  }
+				  else if(val.length-2 == 4){
+					  if(parseInt(val.substring(0, 1))<1 || parseInt(val.substring(0, 2))>12 || parseInt(val.substring(2, 4))>59){
+						  $(e.target).parent().addClass("has-error");
+						  error = true;
+						  finalTime = $(e.target).val();
 					  }
 					  else{
-						  $(e.target).parent().addClass("has-error");
+						finalTime = val.substring(0, 2)+":"+val.substring(2, 4)+" AM";
 					  }
 				  }
 				  else{
-					  if(val.length == 3){
-						  if(parseInt(val.substring(1, 3))>59){
-							$(e.target).parent().addClass("has-error");
-							finalTime = $(e.target).val();
-						  }
-						  else{
-							finalTime = val.substring(0, 1)+":"+val.substring(1, 3)+" AM";
-						  }
-					  }
-					  else if(val.length == 4){
-						  if(parseInt(val.substring(2, 4))>59){
-							$(e.target).parent().addClass("has-error");
-							finalTime = $(e.target).val();
-						  }
-						  else{
-							  var ampm = (parseInt(val.substring(0, 2))<=12) ? " AM" : " PM";
-							  var hour = parseInt(val.substring(0, 2))<=12 ? parseInt(val.substring(0, 2)) : parseInt(val.substring(0, 2))-12;
-							  finalTime = hour+":"+val.substring(2, 4)+ampm;
-						  }
+					  $(e.target).parent().addClass("has-error");
+					  error = true;
+				  }
+				}
+				else if(val.substring(val.length-2, val.length).toLowerCase() == "pm"){
+				  if(val.length-2 == 3){
+					  if(parseInt(val.substring(0, 1))<1 || parseInt(val.substring(1, 3))>59){
+						  $(e.target).parent().addClass("has-error");
+						  error = true;
+						  finalTime = $(e.target).val();
 					  }
 					  else{
-						  $(e.target).parent().addClass("has-error");
+						finalTime = val.substring(0, 1)+":"+val.substring(1, 3)+" PM";
 					  }
 				  }
-				  
+				  else if(val.length-2 == 4){
+					  if(parseInt(val.substring(0, 1))<1 || parseInt(val.substring(0, 2))>12 || parseInt(val.substring(2, 4))>59){
+						  $(e.target).parent().addClass("has-error");
+						  error = true;
+						  finalTime = $(e.target).val();
+					  }
+					  else{
+						finalTime = val.substring(0, 2)+":"+val.substring(2, 4)+" PM";
+					  }
+				  }
+				  else{
+					  $(e.target).parent().addClass("has-error");
+					  error = true;
+				  }
+				}
+				else{
+				  if(val.length == 3){
+					  if(parseInt(val.substring(1, 3))>59){
+						$(e.target).parent().addClass("has-error");
+						error = true;
+						finalTime = $(e.target).val();
+					  }
+					  else{
+						finalTime = val.substring(0, 1)+":"+val.substring(1, 3)+" AM";
+					  }
+				  }
+				  else if(val.length == 4){
+					  if(parseInt(val.substring(2, 4))>59){
+						$(e.target).parent().addClass("has-error");
+						error = true;
+						finalTime = $(e.target).val();
+					  }
+					  else{
+						  var ampm = (parseInt(val.substring(0, 2))<=12) ? " AM" : " PM";
+						  var hour = parseInt(val.substring(0, 2))<=12 ? parseInt(val.substring(0, 2)) : parseInt(val.substring(0, 2))-12;
+						  finalTime = hour+":"+val.substring(2, 4)+ampm;
+					  }
+				  }
+				  else{
+					  $(e.target).parent().addClass("has-error");
+					  error = true;
+				  }
+				}
+				
+				var parentEls = $(e.target).parents().map(function() {return this.className;}).get().join( " " );
+				if(parentEls.indexOf("hide")>-1){
+					error = false;
+				}
+				
+				if(!error){
+					$(e.target).parent().removeClass("has-error");
+				}
 				$(e.target).val(finalTime);
-			});
+			}
+			
 			$(document).on('hidden.bs.modal', '#bad-time-error', function(){
 				$('body').scrollTo($(".has-error").first(), 500);
 			});
