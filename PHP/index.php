@@ -35,12 +35,12 @@ $sections = 1;
 			<h2>Make a Schedule</h2>
 			<div class="row">
 				<div class="panel-group" id="all-courses">
+					<div class="panel panel-default" style="margin-bottom:5px;">
+									<div class="panel-heading">
 					<?php
 						if(count($get)<1){
 							$sections += 1;
 							echo '
-							<div class="panel panel-default" style="margin-bottom:5px;">
-								<div class="panel-heading">
 									<h1 class="panel-title pull-left" id="course1"></h1>
 									<form class = "form-inline pull-left course-control" role="form" autocomplete="off">
 										<div class="entry form-group course-control has-error">
@@ -115,10 +115,7 @@ $sections = 1;
 							';
 						}
 						foreach($get as $k=>$v){
-							echo '
-							<div class="panel panel-default" style="margin-bottom:5px;">
-								<div class="panel-heading">
-									<h1 class="panel-title pull-left" id="course'.$k.'">'.$v["Course Name"].'</h1><br/><hr id="hr'.$k.'" style="width:100%; border-top:1px solid #FFFFFF;">
+							echo '<h1 class="panel-title pull-left" id="course'.$k.'">'.$v["Course Name"].'</h1><br/><hr id="hr'.$k.'" style="width:100%; border-top:1px solid #FFFFFF;">
 									<form class = "form-inline pull-left course-control" role="form" autocomplete="off">
 										<div class="entry form-group course-control">
 											 Name<label style="color:red;">*</label>: <input id="name'.$k.'" class="form-control name" name="fields[]" type="text" placeholder="Enter Course Name" value="'.$v["Course Name"].'"/>
