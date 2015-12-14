@@ -18,7 +18,7 @@ foreach($get as $a){
 				$crn = $b["crn"];
 				unset($b["crn"]);
 			}
-			$temp = new Section($a["Course Name"], $a["Field of Study"], $a["course number"], intval($a["Units"]), $crn);
+			$temp = new Section($a["Course Name"], $a["Field of Study"], $a["course number"], floatval($a["Units"]), $crn);
 			foreach($b as $c){
 				$temp->addTime($c["day"], $c["from"], $c["to"]);
 			}
@@ -54,6 +54,7 @@ function run($sections, $curr, $pick){
 		foreach($curr as $b){
 			$a->addSection($b);
 		}
+		$a->setScore();
 		array_push($GLOBALS['schedules'], $a);
 	}
 	else{
@@ -77,7 +78,7 @@ function makeColorString($color){
 
 function printWeek($a){
 	$numDays = $a->getLastTime()[0] - $a->getFirstTime()[0] + 1;
-	echo "<table class='table table-condensed table-responsive table-bordered'>";
+	echo "<table class='table table-responsive table-bordered'>";
 	echo "<tr>";
 	echo "<td></td>";
 		for($i = $a->getFirstTime()[0]; $i<($numDays+$a->getFirstTime()[0]); $i++){
@@ -120,13 +121,9 @@ function generateColor($c){
 	$red = rand(0, 255);
 	$green = rand(0, 255);
 	$blue = rand(0, 255);
-	
-	if(isset($c)){
-		$red = ($red + $c[0]) / 2;
-        $green = ($green + $c[1]) / 2;
-        $blue = ($blue + $c[2]) / 2;
-	}
-	
+	$red = ($red + $c[0]) / 2;
+	$green = ($green + $c[1]) / 2;
+	$blue = ($blue + $c[2]) / 2;
 	return array(intval($red), intval($green), intval($blue));
 }
 ?>
@@ -209,7 +206,7 @@ function generateColor($c){
 						echo "<div class='panel panel-default'>";
 						echo "<div class='panel-heading panel-title'>";
 						echo "<h4 style='color: #000000;'>".$a->getNumClasses()." classes, ".$a->getNumUnits()." units, with ".reset($a->getCPD())." classes every ".key($a->getCPD())."</h4></div>";
-						echo "<div class='panel-body' id='calendar".$num."'>";
+						echo "<div class='panel-body table-condensed' id='calendar".$num."'>";
 						
 						printWeek($a);
 						
@@ -241,7 +238,7 @@ function generateColor($c){
 						echo "<div class='panel-collapse collapse panel-body".$in."' id='collapse".$num."'>";
 						echo "<table class='table table-condensed table-responsive'>";
 						foreach($a->getSchedule() as $b){
-							echo "<tr><td style='background:rgba(".makeColorString($b->getColor()).", .75)'>";
+							echo "<tr><td style='background:rgba(".makeColorString($b->getColor()).", .65)'>";
 							echo $b;
 							echo "</tr></td>";
 						}

@@ -15,6 +15,8 @@ class Section extends Course{
 	}
 
 	public function addTime($day, $from, $to){
+		$day = $this->dayToInt($day);
+		$day = $this->intToDay($day);
 		$this->meetingTime[$day] = ["from"=>strtotime($from),  "to"=>strtotime($to)];
 		if($day == "Friday"){
 			$this->meetsFriday = true;
@@ -111,6 +113,18 @@ class Section extends Course{
 				return 5;
 			case "Sunday":				
 				return 6;
+			case "M":
+				return 0;
+			case "T":
+				return 1;
+			case "W":
+				return 2;
+			case "R":
+				return 3;
+			case "F":
+				return 4;
+			case "S":
+				return 5;
 		}
 	}	
 	

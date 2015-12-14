@@ -8,7 +8,7 @@ class Schedule{
 	private $firstTime;
 	private $lastTime;
 	private $fridayFree;
-	private $score;
+	public $score;
 	
 	public function __construct(){
 		$this->listOfSections = array();
@@ -150,7 +150,6 @@ class Schedule{
 	}
 	
 	public function getScore(){
-		$this->setScore();
 		return $this->score;
 	}
 	
@@ -162,7 +161,7 @@ class Schedule{
 		return $me;
     }
 	
-	private function setScore(){
+	public function setScore(){
 		$classes = $this->numberOfUnits+$this->numberOfClasses;
 		$this->score = $classes*2;
 		$this->score += ($this->numberOfClasses - reset($this->getCPD()))*1.5;
